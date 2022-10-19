@@ -130,8 +130,9 @@ function AddPlaylist({ navigation, route }) {
         placeHolder="Playlist URL..."
         textContentType="URL"
       />
-      <View style={styles.addButton}>
+      <View style={styles.buttonContainer}>
         <TouchableOpacity
+          style={styles.addButton}
           onPress={() => {
             addPlayist();
           }}
@@ -163,14 +164,19 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontStyle: "italic",
   },
+  buttonContainer: {
+    alignSelf: "center",
+    borderRadius: 15,
+    marginVertical: 10,
+  },
   addButton: {
     borderWidth: 1,
-    paddingVertical: 5,
-    paddingHorizontal: 40,
-    borderRadius: 5,
+    borderRadius: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     backgroundColor: "green",
-    marginVertical: 10,
-    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
     fontSize: 20,
