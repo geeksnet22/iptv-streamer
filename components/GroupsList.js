@@ -56,12 +56,6 @@ function GroupsList({ navigation, route }) {
         })
       }
     >
-      <Image
-        style={styles.logo}
-        source={{
-          uri: "https://images.freeimages.com/images/large-previews/cb5/spooky-tv-ghost-static-1535787.jpg",
-        }}
-      />
       <Text style={styles.name}>{groupName}</Text>
     </TouchableOpacity>
   );
@@ -103,6 +97,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: "#403B3B",
     borderRadius: 10,
+    width: "70%",
+    maxWidth: 300,
   },
   logo: {
     width: 30,

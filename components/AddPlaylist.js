@@ -5,11 +5,14 @@ import axios from "axios";
 import LabelAndTextInputField from "./LabelAndTextInputField";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
+const DEFAULT_PORT = 80;
+
 function AddPlaylist({ navigation, route }) {
   const [playlistName, setPlaylistName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [serverURL, setServerURL] = useState("");
+  const [port, setPort] = useState("");
   const [playlistAddress, setPlaylistAddress] = useState("");
 
   const addPlayist = () => {
@@ -18,7 +21,9 @@ function AddPlaylist({ navigation, route }) {
     }
     let requestUrl = playlistAddress;
     if (playlistAddress === "") {
-      requestUrl = `${serverURL}:80/playlist/${username}/${password}/m3u_plus`;
+      requestUrl = `${serverURL}:${
+        port === "" ? DEFAULT_PORT : port
+      }/playlist/${username}/${password}/m3u_plus`;
     }
     axios
       .get(requestUrl)
@@ -52,11 +57,11 @@ function AddPlaylist({ navigation, route }) {
       isValidInputData = false;
     } else if (
       playlistAddress !== "" &&
-      (username !== "" || password !== "" || serverURL !== "")
+      (username !== "" || password !== "" || serverURL !== "" || port !== "")
     ) {
       Alert.alert(
         "Error",
-        "Please enter user credentials or the playlist url!!!"
+        "Please enter either user credentials or the playlist url!!!"
       );
       isValidInputData = false;
     } else if (
@@ -109,6 +114,13 @@ function AddPlaylist({ navigation, route }) {
         setInputText={setServerURL}
         placeHolder="Server URL..."
         textContentType="URL"
+      />
+      <LabelAndTextInputField
+        label="Port"
+        inputText={port}
+        setInputText={setPort}
+        placeHolder="Port (if available)"
+        textContentType="none"
       />
       <Text style={styles.separatorText}>---or---</Text>
       <LabelAndTextInputField

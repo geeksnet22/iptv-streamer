@@ -42,6 +42,7 @@ function CurrentPlaylists({ navigation, route }) {
           playlistURL={playlist[1]}
           navigation={navigation}
           route={route}
+          fetchAndSetCurrentPlaylists={fetchAndSetCurrentPlaylists}
         />
       ))}
       <FloatingRoundButton
