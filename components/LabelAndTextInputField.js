@@ -8,7 +8,6 @@ function LabelAndTextInputField({
   placeHolder,
   textContentType,
 }) {
-  console.log(textContentType);
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{`${label}`}</Text>
@@ -20,7 +19,6 @@ function LabelAndTextInputField({
         placeholder={placeHolder}
         autoCapitalize="none"
         autoComplete="off"
-        secureTextEntry
       />
     </View>
   );

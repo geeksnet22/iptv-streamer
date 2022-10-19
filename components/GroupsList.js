@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
-  View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Image,
-  TextInput,
 } from "react-native";
 import parser from "iptv-playlist-parser";
 import axios from "axios";

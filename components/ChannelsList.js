@@ -8,20 +8,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 import SearchBar from "./SearchBar";
-import * as ScreenOrientation from "expo-screen-orientation";
 
 function ChannelsList({ navigation, route }) {
   const [searchText, setSearchText] = useState("");
-
-  async function changeScreenOrientation() {
-    await ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.PORTRAIT_UP
-    );
-  }
-
-  useEffect(() => {
-    changeScreenOrientation();
-  }, []);
 
   const Item = ({ logo, name, url }) => (
     <TouchableOpacity
