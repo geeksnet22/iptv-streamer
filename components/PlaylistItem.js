@@ -26,7 +26,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     marginTop: 10,
     borderRadius: 10,
-    maxWidth: "70%",
+    width: "70%",
+    maxWidth: 300,
   },
   playlistNameText: {
     color: "white",

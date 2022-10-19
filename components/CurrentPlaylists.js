@@ -3,12 +3,19 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PlaylistItem from "./PlaylistItem";
 import { useIsFocused } from "@react-navigation/native";
+import FloatingRoundButton from "./FloatingRoundButton";
 
 const ADD_LOGO_ADDRESS = "../assets/add-gb2bab072c_640.png";
 
 function CurrentPlaylists({ navigation, route }) {
   const [playlists, setPlaylists] = useState([]);
   const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchAndSetCurrentPlaylists();
+    }
+  }, [isFocused]);
 
   const fetchAndSetCurrentPlaylists = async () => {
     try {
@@ -22,12 +29,10 @@ function CurrentPlaylists({ navigation, route }) {
     }
   };
 
-  useEffect(() => {
-    if (isFocused) {
-      fetchAndSetCurrentPlaylists();
-    }
-  }, [isFocused]);
-
+  const buttonOnPress = () =>
+    navigation.navigate("AddPlaylist", {
+      existingPlaylistNames: playlists.map((playlist) => playlist[0]),
+    });
   return (
     <View style={styles.container}>
       {playlists.map((playlist) => (
@@ -39,17 +44,11 @@ function CurrentPlaylists({ navigation, route }) {
           route={route}
         />
       ))}
-      <TouchableOpacity
-        style={styles.addPlaylist}
-        onPress={() =>
-          navigation.navigate("AddPlaylist", {
-            existingPlaylistNames: playlists.map((playlist) => playlist[0]),
-          })
-        }
-      >
-        <Image style={styles.addLogo} source={require(ADD_LOGO_ADDRESS)} />
-        <Text style={styles.addText}>Add playlist</Text>
-      </TouchableOpacity>
+      <FloatingRoundButton
+        style={styles.floatingButton}
+        icon={require(ADD_LOGO_ADDRESS)}
+        onPress={buttonOnPress}
+      />
     </View>
   );
 }
@@ -59,26 +58,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "black",
   },
-  addPlaylist: {
-    padding: 10,
-    borderRadius: 10,
-    marginHorizontal: 5,
-    marginTop: 10,
-    backgroundColor: "#403B3B",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    width: 150,
-  },
-  addLogo: {
-    width: 20,
-    height: 20,
-    marginRight: 10,
-    resizeMode: "stretch",
-  },
-  addText: {
-    color: "white",
-    fontSize: 20,
+  floatingButton: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    margin: 20,
   },
 });
 
