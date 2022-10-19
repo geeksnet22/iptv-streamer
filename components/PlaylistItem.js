@@ -47,7 +47,10 @@ function PlaylistItem({
           );
         }}
       >
-        <Image style={styles.menuLogo} source={require(REMOVE_LOGO_LOCATION)} />
+        <Image
+          style={styles.deleteLogo}
+          source={require(REMOVE_LOGO_LOCATION)}
+        />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -70,7 +73,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
   },
-  menuLogo: {
+  deleteLogo: {
     height: 20,
     width: 20,
     resizeMode: "contain",

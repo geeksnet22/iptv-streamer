@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "70%",
     maxWidth: 300,
+    flexGrow: 1,
   },
   logo: {
     width: 30,

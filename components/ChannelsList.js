@@ -72,17 +72,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "70%",
     maxWidth: 300,
+    flexGrow: 1,
   },
   logo: {
     width: 30,
     height: 30,
     marginRight: 10,
-    resizeMode: "stretch",
+    resizeMode: "contain",
   },
   name: {
     color: "white",
     fontWeight: "bold",
     fontSize: 15,
+    flexShrink: 1,
   },
 });
 
