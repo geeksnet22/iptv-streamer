@@ -8,7 +8,7 @@ function PlaylistItem({
   navigation,
   route,
   playlistName,
-  playlistURL,
+  playlistUrl,
   fetchAndSetCurrentPlaylists,
 }) {
   const removePlaylist = async () => {
@@ -27,7 +27,7 @@ function PlaylistItem({
       onPress={() =>
         navigation.navigate("GroupsList", {
           playlistName: playlistName,
-          playlistURL: playlistURL,
+          playlistUrl: playlistUrl,
         })
       }
     >

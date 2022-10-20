@@ -12,7 +12,7 @@ function GroupsList({ navigation, route }) {
 
   useEffect(() => {
     axios
-      .get(route.params.playlistURL)
+      .get(route.params.playlistUrl)
       .then((response) => {
         const tempGroups = {};
         const parsedData = parser.parse(response?.data);
@@ -23,7 +23,7 @@ function GroupsList({ navigation, route }) {
                 {
                   channelName: item.name,
                   channelUrl: item.url,
-                  channelLogoURL: item.tvg.logo,
+                  channelLogoUrl: item.tvg.logo,
                 },
               ])
             : (tempGroups[item.group.title] = [
@@ -57,7 +57,7 @@ function GroupsList({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
       <SearchBar searchText={searchText} setSearchText={setSearchText} />
-      <View style={styles.itemContainer}>
+      <View style={styles.itemListContainer}>
         <FlatList
           data={Object.entries(groups)
             .filter((entry) =>
@@ -79,9 +79,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "black",
   },
-  itemContainer: {
+  itemListContainer: {
     margin: 5,
     maxWidth: 600,
+    marginBottom: 30,
   },
 });
 

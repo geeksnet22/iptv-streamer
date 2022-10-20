@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import PlaylistItem from "./PlaylistItem";
 import { useIsFocused } from "@react-navigation/native";
 import FloatingRoundButton from "./FloatingRoundButton";
+import { FlatList } from "react-native-gesture-handler";
 
 const ADD_LOGO_ADDRESS = "../assets/add-gb2bab072c_640.png";
 
@@ -33,19 +34,29 @@ function CurrentPlaylists({ navigation, route }) {
     navigation.navigate("AddPlaylist", {
       existingPlaylistNames: playlists.map((playlist) => playlist[0]),
     });
+
+  const renderItem = ({ item: { playlistName, playlistUrl } }) => (
+    <PlaylistItem
+      key={playlistName}
+      playlistName={playlistName}
+      playlistUrl={playlistUrl}
+      navigation={navigation}
+      route={route}
+      fetchAndSetCurrentPlaylists={fetchAndSetCurrentPlaylists}
+    />
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.playlistWrapper}>
-        {playlists.map((playlist) => (
-          <PlaylistItem
-            key={playlist[0]}
-            playlistName={playlist[0]}
-            playlistURL={playlist[1]}
-            navigation={navigation}
-            route={route}
-            fetchAndSetCurrentPlaylists={fetchAndSetCurrentPlaylists}
-          />
-        ))}
+        <FlatList
+          data={playlists.map((playlist) => ({
+            playlistName: playlist[0],
+            playlistUrl: playlist[1],
+          }))}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.playlistName}
+        />
       </View>
 
       <FloatingRoundButton
@@ -66,12 +77,13 @@ const styles = StyleSheet.create({
   playlistWrapper: {
     margin: 5,
     maxWidth: 600,
+    marginBottom: 20,
   },
   floatingButton: {
     position: "absolute",
     bottom: 0,
     right: 0,
-    margin: 20,
+    margin: 30,
   },
 });
 

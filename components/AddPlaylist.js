@@ -11,7 +11,7 @@ function AddPlaylist({ navigation, route }) {
   const [playlistName, setPlaylistName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [serverURL, setServerURL] = useState("");
+  const [serverUrl, setServerUrl] = useState("");
   const [port, setPort] = useState("");
   const [playlistAddress, setPlaylistAddress] = useState("");
 
@@ -21,7 +21,7 @@ function AddPlaylist({ navigation, route }) {
     }
     let requestUrl = playlistAddress;
     if (playlistAddress === "") {
-      requestUrl = `${serverURL}:${
+      requestUrl = `${serverUrl}:${
         port === "" ? DEFAULT_PORT : port
       }/playlist/${username}/${password}/m3u_plus`;
     }
@@ -50,14 +50,14 @@ function AddPlaylist({ navigation, route }) {
     if (
       username === "" &&
       password === "" &&
-      serverURL === "" &&
+      serverUrl === "" &&
       playlistAddress === ""
     ) {
       Alert.alert("Error", "Please enter user credentials or playlist url!!!");
       isValidInputData = false;
     } else if (
       playlistAddress !== "" &&
-      (username !== "" || password !== "" || serverURL !== "" || port !== "")
+      (username !== "" || password !== "" || serverUrl !== "" || port !== "")
     ) {
       Alert.alert(
         "Error",
@@ -66,8 +66,8 @@ function AddPlaylist({ navigation, route }) {
       isValidInputData = false;
     } else if (
       playlistAddress === "" &&
-      (username !== "" || password !== "" || serverURL !== "") &&
-      (username === "" || password === "" || serverURL === "")
+      (username !== "" || password !== "" || serverUrl !== "") &&
+      (username === "" || password === "" || serverUrl === "")
     ) {
       Alert.alert("Error", "Please enter complete credentials");
       isValidInputData = false;
@@ -110,8 +110,8 @@ function AddPlaylist({ navigation, route }) {
       />
       <LabelAndTextInputField
         label="Server URL"
-        inputText={serverURL}
-        setInputText={setServerURL}
+        inputText={serverUrl}
+        setInputText={setServerUrl}
         placeHolder="Server URL..."
         textContentType="URL"
       />

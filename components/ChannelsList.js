@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   itemListContainer: {
     margin: 5,
     maxWidth: 600,
+    marginBottom: 30,
   },
 });
 
