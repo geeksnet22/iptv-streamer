@@ -21,10 +21,15 @@ function AddPlaylist({ navigation, route }) {
     }
     let requestUrl = playlistAddress;
     if (playlistAddress === "") {
-      requestUrl = `${serverUrl}:${
+      requestUrl = `${
+        serverUrl.slice(serverUrl.length - 1) === "/"
+          ? serverUrl.substring(0, serverUrl.length - 1)
+          : serverUrl
+      }:${
         port === "" ? DEFAULT_PORT : port
       }/playlist/${username}/${password}/m3u_plus`;
     }
+    console.log(requestUrl);
     axios
       .get(requestUrl)
       .then((response) => {
