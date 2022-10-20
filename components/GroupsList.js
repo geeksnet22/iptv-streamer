@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { SafeAreaView, StyleSheet, View, Alert } from "react-native";
 import parser from "iptv-playlist-parser";
 import axios from "axios";
 import { FlatList } from "react-native-gesture-handler";
@@ -38,6 +38,7 @@ function GroupsList({ navigation, route }) {
       })
       .catch((error) => {
         console.log(error);
+        Alert.alert("Error", "Error loading playlist. Please try again!!!");
       });
   }, []);
 

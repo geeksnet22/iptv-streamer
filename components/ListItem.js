@@ -2,7 +2,6 @@ import React from "react";
 import { Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 
 function ListItem({ iconUrl, name, onPress }) {
-  console.log(iconUrl);
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       {iconUrl && <Image style={styles.icon} source={{ uri: iconUrl }} />}
@@ -13,12 +12,10 @@ function ListItem({ iconUrl, name, onPress }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
     backgroundColor: "#403B3B",
-    flexGrow: 1,
     borderBottomColor: "white",
     borderWidth: 1,
     minHeight: 75,
