@@ -2,6 +2,7 @@ import React from "react";
 import { Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 
 function ListItem({ iconUrl, name, onPress }) {
+  console.log(iconUrl);
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       {iconUrl && <Image style={styles.icon} source={{ uri: iconUrl }} />}

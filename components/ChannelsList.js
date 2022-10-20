@@ -6,13 +6,13 @@ import SearchBar from "./SearchBar";
 function ChannelsList({ navigation, route }) {
   const [searchText, setSearchText] = useState("");
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item: { id, iconUrl, name, url } }) => (
     <ListItem
-      id={item.id}
-      icon={item.icon}
-      name={item.name}
+      id={id}
+      iconUrl={iconUrl}
+      name={name}
       onPress={() =>
-        navigation.navigate("VideoPlayer", { name: item.name, uri: item.url })
+        navigation.navigate("VideoPlayer", { name: name, uri: url })
       }
     />
   );
