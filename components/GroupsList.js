@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 import parser from "iptv-playlist-parser";
 import axios from "axios";
 import { FlatList } from "react-native-gesture-handler";
 import SearchBar from "./SearchBar";
+import ListItem from "./ListItem";
 
 function GroupsList({ navigation, route }) {
   const [groups, setGroups] = useState({});
@@ -28,14 +23,14 @@ function GroupsList({ navigation, route }) {
                 {
                   channelName: item.name,
                   channelUrl: item.url,
-                  channelLogo: item.tvg.logo,
+                  channelLogoURL: item.tvg.logo,
                 },
               ])
             : (tempGroups[item.group.title] = [
                 {
                   channelName: item.name,
                   channelUrl: item.url,
-                  channelLogo: item.tvg.logo,
+                  channelLogoUrl: item.tvg.logo,
                 },
               ]);
         });
@@ -46,39 +41,36 @@ function GroupsList({ navigation, route }) {
       });
   }, []);
 
-  const Item = ({ groupName, channelsInfo }) => (
-    <TouchableOpacity
-      style={styles.item}
+  const renderItem = ({ item }) => (
+    <ListItem
+      id={item.id}
+      name={item.groupName}
       onPress={() =>
         navigation.navigate("ChannelsList", {
-          groupName: groupName,
-          channelsInfo: channelsInfo,
+          groupName: item.groupName,
+          channelsInfo: item.channelsInfo,
         })
       }
-    >
-      <Text style={styles.name}>{groupName}</Text>
-    </TouchableOpacity>
-  );
-
-  const renderItem = ({ item }) => (
-    <Item groupName={item.groupName} channelsInfo={item.channelsInfo} />
+    />
   );
 
   return (
     <SafeAreaView style={styles.container}>
       <SearchBar searchText={searchText} setSearchText={setSearchText} />
-      <FlatList
-        data={Object.entries(groups)
-          .filter((entry) =>
-            entry[0].toUpperCase().includes(searchText.trim().toUpperCase())
-          )
-          .map((entry) => ({
-            groupName: entry[0],
-            channelsInfo: entry[1],
-          }))}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.groupName}
-      />
+      <View style={styles.itemContainer}>
+        <FlatList
+          data={Object.entries(groups)
+            .filter((entry) =>
+              entry[0].toUpperCase().includes(searchText.trim().toUpperCase())
+            )
+            .map((entry) => ({
+              groupName: entry[0],
+              channelsInfo: entry[1],
+            }))}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.groupName}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -87,30 +79,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "black",
   },
-  item: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 10,
-    marginHorizontal: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    backgroundColor: "#403B3B",
-    borderRadius: 10,
-    width: "70%",
-    maxWidth: 300,
-    flexGrow: 1,
-  },
-  logo: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    resizeMode: "stretch",
-  },
-  name: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 15,
+  itemContainer: {
+    margin: 5,
+    maxWidth: 600,
   },
 });
 

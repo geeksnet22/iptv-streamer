@@ -60,14 +60,13 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     backgroundColor: "#403B3B",
-    marginHorizontal: 5,
-    marginTop: 10,
-    borderRadius: 10,
-    width: "70%",
-    maxWidth: 300,
+    minHeight: 75,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    borderBottomLeftRadius: 10,
+    borderBottomColor: "white",
+    borderWidth: 1,
   },
   playlistNameText: {
     color: "white",

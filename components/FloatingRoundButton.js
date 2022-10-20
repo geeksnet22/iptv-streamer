@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Image, TouchableOpacity, StyleSheet } from "react-native";
 
 function FloatingRoundButton({ style, icon, onPress }) {
   return (
