@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "IptvStreamer-expo",
-    "slug": "IptvStreamer-expo",
+    "name": "IptvStreamer",
+    "slug": "IptvStreamer",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
@@ -22,7 +22,15 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "blockedPermissions": [
+      "android.permission.RECORD_AUDIO", 
+      "android.permission.READ_CONTACTS",
+      "android.permission.READ_PHONE_STATE",
+      "android.permission.CAMERA"
+    ],
+      "package": "com.iptv.iptvstreamer",
+      "versionCode": 1
     },
     "web": {
     }

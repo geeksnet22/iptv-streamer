@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, StyleSheet, View, Alert } from "react-native";
+import { SafeAreaView, StyleSheet, View, Alert, FlatList } from "react-native";
 import parser from "iptv-playlist-parser";
 import axios from "axios";
-import { FlatList } from "react-native-gesture-handler";
 import SearchBar from "./SearchBar";
 import ListItem from "./ListItem";
 

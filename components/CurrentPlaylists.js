@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PlaylistItem from "./PlaylistItem";
 import { useIsFocused } from "@react-navigation/native";
 import FloatingRoundButton from "./FloatingRoundButton";
-import { FlatList } from "react-native-gesture-handler";
 
 const ADD_LOGO_ADDRESS = "../assets/add-gb2bab072c_640.png";
 

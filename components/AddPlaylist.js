@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Alert } from "react-native";
+import { StyleSheet, Text, View, Alert, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import LabelAndTextInputField from "./LabelAndTextInputField";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const DEFAULT_PORT = 80;
 
@@ -29,7 +28,7 @@ function AddPlaylist({ navigation, route }) {
         port === "" ? DEFAULT_PORT : port
       }/playlist/${username}/${password}/m3u_plus`;
     }
-    console.log(requestUrl);
+
     axios
       .get(requestUrl)
       .then((response) => {
