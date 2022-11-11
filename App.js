@@ -36,7 +36,7 @@ function App() {
         <Stack.Screen
           name="VideoPlayer"
           component={VideoPlayer}
-          options={({ route }) => ({ title: route.params.name })}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

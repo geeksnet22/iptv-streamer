@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -8,9 +8,18 @@ import {
 } from "react-native";
 import { Video, VideoFullscreenUpdate, ResizeMode } from "expo-av";
 import { StatusBar } from "expo-status-bar";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 function VideoPlayer({ navigation, route }) {
   const video = useRef(null);
+
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
+      ).catch((error) => console.log(error));
+    }
+  }, []);
 
   const replaceFileTypeTsWithM3u8 = (originalUrl) =>
     originalUrl?.slice(originalUrl.length - 2) === "ts"
@@ -43,9 +52,10 @@ function VideoPlayer({ navigation, route }) {
           Platform.OS === "ios" &&
           event.fullscreenUpdate === VideoFullscreenUpdate.PLAYER_WILL_DISMISS
             ? navigation.goBack()
-            : () => {}
+            : {}
         }
         style={styles.video}
+        collapsable={true}
       />
     </View>
   );

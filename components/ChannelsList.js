@@ -1,10 +1,27 @@
-import React, { useState } from "react";
-import { View, FlatList, SafeAreaView, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Platform,
+} from "react-native";
 import ListItem from "./ListItem";
 import SearchBar from "./SearchBar";
+import * as ScreenOrientation from "expo-screen-orientation";
+import { useIsFocused } from "@react-navigation/native";
 
 function ChannelsList({ navigation, route }) {
   const [searchText, setSearchText] = useState("");
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (Platform.OS === "android" && isFocused) {
+      ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      ).catch((error) => console.log(error));
+    }
+  }, [isFocused]);
 
   const renderItem = ({ item: { id, iconUrl, name, url } }) => (
     <ListItem

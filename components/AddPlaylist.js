@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Alert, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import LabelAndTextInputField from "./LabelAndTextInputField";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
 
 const DEFAULT_PORT = 80;
 
@@ -89,7 +90,7 @@ function AddPlaylist({ navigation, route }) {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
       <LabelAndTextInputField
         label="Playlist name"
         inputText={playlistName}
@@ -144,7 +145,7 @@ function AddPlaylist({ navigation, route }) {
           <Text style={styles.buttonText}>Add</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -152,7 +153,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    alignItems: "flex-start",
     padding: 10,
     backgroundColor: "black",
   },
