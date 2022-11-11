@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PlaylistItem from "./PlaylistItem";
 import { useIsFocused } from "@react-navigation/native";
@@ -46,7 +46,26 @@ function CurrentPlaylists({ navigation, route }) {
   );
 
   return (
-    <View style={styles.container}>
+    <View
+      style={
+        playlists.length === 0
+          ? { ...styles.container, justifyContent: "center" }
+          : styles.container
+      }
+    >
+      {playlists.length === 0 ? (
+        <Text
+          style={{
+            color: "white",
+            fontSize: 20,
+            alignSelf: "center",
+            fontStyle: "italic",
+            flexDirection: "column",
+          }}
+        >
+          Please add a playlist
+        </Text>
+      ) : null}
       <View style={styles.playlistWrapper}>
         <FlatList
           data={playlists.map((playlist) => ({

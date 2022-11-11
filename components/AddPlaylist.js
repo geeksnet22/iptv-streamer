@@ -99,6 +99,7 @@ function AddPlaylist({ navigation, route }) {
           placeHolder="Could be anything..."
           textContentType="name"
         />
+        <View style={styles.playlistNameSeparator} />
         <LabelAndTextInputField
           label="M3U Playlist URL"
           inputText={playlistAddress}
@@ -162,6 +163,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#403B3B",
     padding: 10,
     borderRadius: 10,
+  },
+  playlistNameSeparator: {
+    borderWidth: 1,
+    borderColor: "white",
+    borderStyle: "dashed",
   },
   headerText: {
     fontSize: 20,

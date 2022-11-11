@@ -17,22 +17,22 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "requireFullScreen": true
+      "requireFullScreen": true,
+      "bundleIdentifier": "com.iptv.iptvstreamer"
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#FFFFFF"
       },
       "blockedPermissions": [
-      "android.permission.RECORD_AUDIO", 
-      "android.permission.READ_CONTACTS",
-      "android.permission.READ_PHONE_STATE",
-      "android.permission.CAMERA"
-    ],
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_CONTACTS",
+        "android.permission.READ_PHONE_STATE",
+        "android.permission.CAMERA"
+      ],
       "package": "com.iptv.iptvstreamer",
       "versionCode": 1
     },
-    "web": {
-    }
+    "web": {}
   }
 }
