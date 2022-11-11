@@ -91,15 +91,23 @@ function AddPlaylist({ navigation, route }) {
 
   return (
     <KeyboardAwareScrollView style={styles.container}>
-      <LabelAndTextInputField
-        label="Playlist name"
-        inputText={playlistName}
-        setInputText={setPlaylistName}
-        placeHolder="Could be anything..."
-        textContentType="name"
-      />
       <View style={styles.credentialsContainer}>
-        <Text style={styles.headerText}>Please enter your credentials</Text>
+        <LabelAndTextInputField
+          label="Playlist name"
+          inputText={playlistName}
+          setInputText={setPlaylistName}
+          placeHolder="Could be anything..."
+          textContentType="name"
+        />
+        <LabelAndTextInputField
+          label="M3U Playlist URL"
+          inputText={playlistAddress}
+          setInputText={setPlaylistAddress}
+          placeHolder="Playlist URL..."
+          textContentType="URL"
+        />
+        <Text style={styles.separatorText}>---or---</Text>
+        <Text style={styles.headerText}>Playlist Credentials</Text>
         <LabelAndTextInputField
           label="Username"
           inputText={username}
@@ -129,15 +137,6 @@ function AddPlaylist({ navigation, route }) {
           textContentType="none"
         />
       </View>
-
-      <Text style={styles.separatorText}>---or---</Text>
-      <LabelAndTextInputField
-        label="M3U Playlist URL"
-        inputText={playlistAddress}
-        setInputText={setPlaylistAddress}
-        placeHolder="Playlist URL..."
-        textContentType="URL"
-      />
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.addButton}
