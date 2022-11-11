@@ -98,35 +98,38 @@ function AddPlaylist({ navigation, route }) {
         placeHolder="Could be anything..."
         textContentType="name"
       />
-      <Text style={styles.headerText}>Please enter your credentials</Text>
-      <LabelAndTextInputField
-        label="Username"
-        inputText={username}
-        setInputText={setUsername}
-        placeHolder="Username..."
-        textContentType="username"
-      />
-      <LabelAndTextInputField
-        label="Password"
-        inputText={password}
-        setInputText={setPassword}
-        placeHolder="Password..."
-        textContentType="password"
-      />
-      <LabelAndTextInputField
-        label="Server URL"
-        inputText={serverUrl}
-        setInputText={setServerUrl}
-        placeHolder="Server URL..."
-        textContentType="URL"
-      />
-      <LabelAndTextInputField
-        label="Port"
-        inputText={port}
-        setInputText={setPort}
-        placeHolder="Port (if available)"
-        textContentType="none"
-      />
+      <View style={styles.credentialsContainer}>
+        <Text style={styles.headerText}>Please enter your credentials</Text>
+        <LabelAndTextInputField
+          label="Username"
+          inputText={username}
+          setInputText={setUsername}
+          placeHolder="Username..."
+          textContentType="username"
+        />
+        <LabelAndTextInputField
+          label="Password"
+          inputText={password}
+          setInputText={setPassword}
+          placeHolder="Password..."
+          textContentType="password"
+        />
+        <LabelAndTextInputField
+          label="Server URL"
+          inputText={serverUrl}
+          setInputText={setServerUrl}
+          placeHolder="Server URL..."
+          textContentType="URL"
+        />
+        <LabelAndTextInputField
+          label="Port"
+          inputText={port}
+          setInputText={setPort}
+          placeHolder="Port (if available)"
+          textContentType="none"
+        />
+      </View>
+
       <Text style={styles.separatorText}>---or---</Text>
       <LabelAndTextInputField
         label="M3U Playlist URL"
@@ -155,6 +158,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     padding: 10,
     backgroundColor: "black",
+  },
+  credentialsContainer: {
+    backgroundColor: "#403B3B",
+    padding: 10,
+    borderRadius: 10,
   },
   headerText: {
     fontSize: 20,
