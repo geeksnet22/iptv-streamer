@@ -15,20 +15,21 @@
     "axios": "^1.1.3",
     "expo": "~46.0.17",
     "expo-av": "~12.0.4",
+    "expo-screen-orientation": "~4.3.0",
+    "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
     "expo-updates": "~0.14.7",
     "iptv-playlist-parser": "^0.12.1",
     "react": "18.0.0",
+    "react-dom": "18.0.0",
     "react-native": "0.69.6",
     "react-native-gesture-handler": "^2.8.0",
     "react-native-keyboard-aware-scrollview": "^2.1.0",
     "react-native-reanimated": "^2.12.0",
     "react-native-safe-area-context": "^4.4.1",
     "react-native-screens": "^3.18.2",
-    "expo-screen-orientation": "~4.3.0",
-    "expo-splash-screen": "~0.16.2",
-    "react-dom": "18.0.0",
-    "react-native-web": "~0.18.7"
+    "react-native-web": "~0.18.7",
+    "expo-system-ui": "~1.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

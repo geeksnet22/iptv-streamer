@@ -30,8 +30,8 @@
         "android.permission.READ_PHONE_STATE",
         "android.permission.CAMERA"
       ],
-      "package": "com.iptv.iptvstreamer",
-      "versionCode": 1
+      "package": "com.iptv.streamer",
+      "versionCode": 3
     },
     "web": {}
   }

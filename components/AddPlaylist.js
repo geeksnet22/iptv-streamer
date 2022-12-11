@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Alert, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  TouchableOpacity,
+  ToastAndroid,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import LabelAndTextInputField from "./LabelAndTextInputField";
@@ -43,7 +50,15 @@ function AddPlaylist({ navigation, route }) {
   const setPlaylistValue = async (requestUrl) => {
     try {
       await AsyncStorage.setItem(playlistName, requestUrl)
-        .then((value) => navigation.navigate("CurrentPlaylists"))
+        .then((value) => {
+          navigation.navigate("CurrentPlaylists");
+          Platform.OS === "android"
+            ? ToastAndroid.show(
+                "Playlist successfully added!!!",
+                ToastAndroid.SHORT
+              )
+            : {};
+        })
         .catch((error) => console.log(error));
     } catch (e) {
       Alert.alert("Error", "Error saving the playlist. Please try again.");
@@ -100,6 +115,9 @@ function AddPlaylist({ navigation, route }) {
           textContentType="name"
         />
         <View style={styles.playlistNameSeparator} />
+        <Text style={styles.headerText}>
+          Please enter M3U Playlist URL or Playlist Credentials (not both)
+        </Text>
         <LabelAndTextInputField
           label="M3U Playlist URL"
           inputText={playlistAddress}
@@ -107,8 +125,7 @@ function AddPlaylist({ navigation, route }) {
           placeHolder="Playlist URL..."
           textContentType="URL"
         />
-        <Text style={styles.separatorText}>---or---</Text>
-        <Text style={styles.headerText}>Playlist Credentials</Text>
+        <Text style={styles.separatorText}>---OR---</Text>
         <LabelAndTextInputField
           label="Username"
           inputText={username}
@@ -171,7 +188,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 20,
-    color: "white",
+    color: "yellow",
     alignSelf: "flex-start",
     fontStyle: "italic",
   },

@@ -26,15 +26,12 @@ function LabelAndTextInputField({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    marginVertical: 10,
-    alignItems: "center",
+    flexDirection: "column",
+    marginVertical: 5,
+    alignItems: "flex-start",
   },
   label: {
     fontSize: 20,
-    marginHorizontal: 10,
-    flex: 1,
-    textAlign: "center",
     color: "white",
   },
   textInput: {
@@ -43,9 +40,9 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: "white",
     height: 40,
-    flexDirection: "column",
-    flex: 1,
     fontSize: 15,
+    width: "100%",
+    alignSelf: "center",
   },
 });
 
