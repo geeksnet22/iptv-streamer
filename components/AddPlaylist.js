@@ -26,7 +26,7 @@ function AddPlaylist({ navigation, route }) {
     if (!isValidInputData()) {
       return;
     }
-    let requestUrl = playlistAddress;
+    let requestUrl = playlistAddress.trim();
     if (playlistAddress === "") {
       requestUrl = `${
         serverUrl.slice(serverUrl.length - 1) === "/"
