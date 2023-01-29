@@ -10,6 +10,7 @@ import ListItem from "./ListItem";
 import SearchBar from "./SearchBar";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useIsFocused } from "@react-navigation/native";
+import { globalStyles } from "./styles/Styles";
 
 function ChannelsList({ navigation, route }) {
   const [searchText, setSearchText] = useState("");
@@ -35,7 +36,12 @@ function ChannelsList({ navigation, route }) {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{
+        ...styles.container,
+        ...globalStyles.containerDarkBackgroundColor,
+      }}
+    >
       <SearchBar searchText={searchText} setSearchText={setSearchText} />
       <View style={styles.itemListContainer}>
         <FlatList
@@ -61,7 +67,6 @@ function ChannelsList({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black",
   },
   itemListContainer: {
     margin: 5,

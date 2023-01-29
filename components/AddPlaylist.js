@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import LabelAndTextInputField from "./LabelAndTextInputField";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
+import { globalStyles } from "./styles/Styles";
 
 const DEFAULT_PORT = 80;
 
@@ -105,8 +106,18 @@ function AddPlaylist({ navigation, route }) {
   };
 
   return (
-    <KeyboardAwareScrollView style={styles.container}>
-      <View style={styles.credentialsContainer}>
+    <KeyboardAwareScrollView
+      style={{
+        ...styles.container,
+        ...globalStyles.containerDarkBackgroundColor,
+      }}
+    >
+      <View
+        style={{
+          ...styles.credentialsContainer,
+          ...globalStyles.darkBackgroundColor,
+        }}
+      >
         <LabelAndTextInputField
           label="Playlist name"
           inputText={playlistName}
@@ -174,10 +185,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     padding: 10,
-    backgroundColor: "black",
   },
   credentialsContainer: {
-    backgroundColor: "#403B3B",
     padding: 10,
     borderRadius: 10,
   },

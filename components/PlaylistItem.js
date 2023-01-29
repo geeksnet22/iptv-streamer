@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, Image, StyleSheet, Alert, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { globalStyles } from "./styles/Styles";
 
 const REMOVE_LOGO_LOCATION = "../assets/icons8-remove-48.png";
 
@@ -23,7 +24,7 @@ function PlaylistItem({
 
   return (
     <TouchableOpacity
-      style={styles.container}
+      style={{ ...styles.container, ...globalStyles.darkBackgroundColor }}
       onPress={() =>
         navigation.navigate("GroupsList", {
           playlistName: playlistName,
@@ -59,7 +60,6 @@ function PlaylistItem({
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: "#403B3B",
     minHeight: 75,
     flexDirection: "row",
     justifyContent: "space-between",

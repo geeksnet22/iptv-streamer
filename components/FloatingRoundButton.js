@@ -1,10 +1,15 @@
 import React from "react";
 import { Image, TouchableOpacity, StyleSheet } from "react-native";
+import { globalStyles } from "./styles/Styles";
 
 function FloatingRoundButton({ style, icon, onPress }) {
   return (
     <TouchableOpacity
-      style={{ ...styles.container, ...style }}
+      style={{
+        ...styles.container,
+        ...style,
+        ...globalStyles.darkBackgroundColor,
+      }}
       onPress={onPress}
     >
       <Image style={styles.image} source={icon} />
@@ -14,7 +19,6 @@ function FloatingRoundButton({ style, icon, onPress }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#403B3B",
     borderRadius: 30,
     height: 60,
     width: 60,

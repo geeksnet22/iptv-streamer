@@ -1,9 +1,13 @@
 import React from "react";
 import { Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { globalStyles } from "./styles/Styles";
 
 function ListItem({ iconUrl, name, onPress }) {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity
+      style={{ ...styles.container, ...globalStyles.darkBackgroundColor }}
+      onPress={onPress}
+    >
       {iconUrl && <Image style={styles.icon} source={{ uri: iconUrl }} />}
       <Text style={styles.name}>{name}</Text>
     </TouchableOpacity>
@@ -15,7 +19,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
-    backgroundColor: "#403B3B",
     borderBottomColor: "white",
     borderWidth: 1,
     minHeight: 75,

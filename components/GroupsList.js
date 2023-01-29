@@ -5,6 +5,8 @@ import axios from "axios";
 import SearchBar from "./SearchBar";
 import ListItem from "./ListItem";
 
+const globalStyles = require("./styles/Styles");
+
 function GroupsList({ navigation, route }) {
   const [groups, setGroups] = useState({});
   const [searchText, setSearchText] = useState("");
@@ -55,7 +57,12 @@ function GroupsList({ navigation, route }) {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{
+        ...styles.container,
+        ...globalStyles.containerDarkBackgroundColor,
+      }}
+    >
       <SearchBar searchText={searchText} setSearchText={setSearchText} />
       <View style={styles.itemListContainer}>
         <FlatList
@@ -77,7 +84,6 @@ function GroupsList({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black",
   },
   itemListContainer: {
     margin: 5,

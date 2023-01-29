@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import PlaylistItem from "./PlaylistItem";
 import { useIsFocused } from "@react-navigation/native";
 import FloatingRoundButton from "./FloatingRoundButton";
+import { globalStyles } from "./styles/Styles";
 
 const ADD_LOGO_ADDRESS = "../assets/add-gb2bab072c_640.png";
 
@@ -30,7 +31,7 @@ function CurrentPlaylists({ navigation, route }) {
   };
 
   const buttonOnPress = () =>
-    navigation.navigate("AddPlaylist", {
+    navigation.navigate("PlaylistName", {
       existingPlaylistNames: playlists.map((playlist) => playlist[0]),
     });
 
@@ -49,8 +50,15 @@ function CurrentPlaylists({ navigation, route }) {
     <View
       style={
         playlists.length === 0
-          ? { ...styles.container, justifyContent: "center" }
-          : styles.container
+          ? {
+              ...styles.container,
+              ...globalStyles.containerDarkBackgroundColor,
+              justifyContent: "center",
+            }
+          : {
+              ...styles.container,
+              ...globalStyles.containerDarkBackgroundColor,
+            }
       }
     >
       {playlists.length === 0 ? (
@@ -89,7 +97,6 @@ function CurrentPlaylists({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black",
     maxWidth: 600,
   },
   playlistWrapper: {
