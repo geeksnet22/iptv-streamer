@@ -11,40 +11,58 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import LabelAndTextInputField from "./LabelAndTextInputField";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
-import { globalStyles } from "./styles/Styles";
+import { globalStyles } from "../styles/Styles";
 
 const DEFAULT_PORT = 80;
 
 function AddPlaylist({ navigation, route }) {
   const [playlistName, setPlaylistName] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [serverUrl, setServerUrl] = useState("");
-  const [port, setPort] = useState("");
+  // const [username, setUsername] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [serverUrl, setServerUrl] = useState("");
+  // const [port, setPort] = useState("");
   const [playlistAddress, setPlaylistAddress] = useState("");
+
+  // const addPlayist = () => {
+  //   if (!isValidInputData()) {
+  //     return;
+  //   }
+  //   let requestUrl = playlistAddress.trim();
+  //   if (playlistAddress === "") {
+  //     requestUrl = `${
+  //       serverUrl.slice(serverUrl.length - 1) === "/"
+  //         ? serverUrl.substring(0, serverUrl.length - 1)
+  //         : serverUrl
+  //     }:${
+  //       port === "" ? DEFAULT_PORT : port
+  //     }/playlist/${username}/${password}/m3u_plus`;
+  //   }
+
+  //   axios
+  //     .get(requestUrl)
+  //     .then((response) => {
+  //       setPlaylistValue(requestUrl);
+  //     })
+  //     .catch((error) => {
+  //       Alert.alert("Error", "Not a valid playist/user credentials!!!");
+  //     });
+  // };
 
   const addPlayist = () => {
     if (!isValidInputData()) {
       return;
     }
-    let requestUrl = playlistAddress.trim();
-    if (playlistAddress === "") {
-      requestUrl = `${
-        serverUrl.slice(serverUrl.length - 1) === "/"
-          ? serverUrl.substring(0, serverUrl.length - 1)
-          : serverUrl
-      }:${
-        port === "" ? DEFAULT_PORT : port
-      }/playlist/${username}/${password}/m3u_plus`;
-    }
-
+    const requestUrl = playlistAddress.trim();
     axios
       .get(requestUrl)
       .then((response) => {
         setPlaylistValue(requestUrl);
       })
       .catch((error) => {
-        Alert.alert("Error", "Not a valid playist/user credentials!!!");
+        Alert.alert(
+          "Error",
+          "Not a valid playlist, please try a different URL!!!"
+        );
       });
   };
 
@@ -68,31 +86,7 @@ function AddPlaylist({ navigation, route }) {
 
   const isValidInputData = () => {
     let isValidInputData = true;
-    if (
-      username === "" &&
-      password === "" &&
-      serverUrl === "" &&
-      playlistAddress === ""
-    ) {
-      Alert.alert("Error", "Please enter user credentials or playlist url!!!");
-      isValidInputData = false;
-    } else if (
-      playlistAddress !== "" &&
-      (username !== "" || password !== "" || serverUrl !== "" || port !== "")
-    ) {
-      Alert.alert(
-        "Error",
-        "Please enter either user credentials or the playlist url!!!"
-      );
-      isValidInputData = false;
-    } else if (
-      playlistAddress === "" &&
-      (username !== "" || password !== "" || serverUrl !== "") &&
-      (username === "" || password === "" || serverUrl === "")
-    ) {
-      Alert.alert("Error", "Please enter complete credentials");
-      isValidInputData = false;
-    } else if (playlistName === "") {
+    if (playlistName === "") {
       Alert.alert("Error", "Please enter playist name!!!");
       isValidInputData = false;
     } else if (route.params.existingPlaylistNames.includes(playlistName)) {
@@ -101,21 +95,64 @@ function AddPlaylist({ navigation, route }) {
         "Playlist already exists. Please use a different name!!!"
       );
       isValidInputData = false;
+    } else if (playlistAddress === "") {
+      Alert.alert("Error", "Please enter playlist url!!!");
+      isValidInputData = false;
     }
     return isValidInputData;
   };
+
+  // const isValidInputData = () => {
+  //   let isValidInputData = true;
+  //   if (
+  //     username === "" &&
+  //     password === "" &&
+  //     serverUrl === "" &&
+  //     playlistAddress === ""
+  //   ) {
+  //     Alert.alert("Error", "Please enter user credentials or playlist url!!!");
+  //     isValidInputData = false;
+  //   } else if (
+  //     playlistAddress !== "" &&
+  //     (username !== "" || password !== "" || serverUrl !== "" || port !== "")
+  //   ) {
+  //     Alert.alert(
+  //       "Error",
+  //       "Please enter either user credentials or the playlist url!!!"
+  //     );
+  //     isValidInputData = false;
+  //   } else if (
+  //     playlistAddress === "" &&
+  //     (username !== "" || password !== "" || serverUrl !== "") &&
+  //     (username === "" || password === "" || serverUrl === "")
+  //   ) {
+  //     Alert.alert("Error", "Please enter complete credentials");
+  //     isValidInputData = false;
+  //   } else if (playlistName === "") {
+  //     Alert.alert("Error", "Please enter playist name!!!");
+  //     isValidInputData = false;
+  //   } else if (route.params.existingPlaylistNames.includes(playlistName)) {
+  //     Alert.alert(
+  //       "Error",
+  //       "Playlist already exists. Please use a different name!!!"
+  //     );
+  //     isValidInputData = false;
+  //   }
+  //   return isValidInputData;
+  // };
 
   return (
     <KeyboardAwareScrollView
       style={{
         ...styles.container,
-        ...globalStyles.containerDarkBackgroundColor,
+        ...globalStyles.primaryContainer,
       }}
+      contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
     >
       <View
         style={{
           ...styles.credentialsContainer,
-          ...globalStyles.darkBackgroundColor,
+          ...globalStyles.secondaryContainer,
         }}
       >
         <LabelAndTextInputField
@@ -125,10 +162,10 @@ function AddPlaylist({ navigation, route }) {
           placeHolder="Could be anything..."
           textContentType="name"
         />
-        <View style={styles.playlistNameSeparator} />
-        <Text style={styles.headerText}>
+        {/* <View style={styles.playlistNameSeparator} /> */}
+        {/* <Text style={{ ...globalStyles.headerText, ...styles.headerText }}>
           Please enter M3U Playlist URL or Playlist Credentials (not both)
-        </Text>
+        </Text> */}
         <LabelAndTextInputField
           label="M3U Playlist URL"
           inputText={playlistAddress}
@@ -136,7 +173,9 @@ function AddPlaylist({ navigation, route }) {
           placeHolder="Playlist URL..."
           textContentType="URL"
         />
-        <Text style={styles.separatorText}>---OR---</Text>
+        {/* <Text style={{ ...globalStyles.headerText, ...styles.separatorText }}>
+          ---OR---
+        </Text>
         <LabelAndTextInputField
           label="Username"
           inputText={username}
@@ -164,7 +203,7 @@ function AddPlaylist({ navigation, route }) {
           setInputText={setPort}
           placeHolder="Port (if available)"
           textContentType="none"
-        />
+        /> */}
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
@@ -173,7 +212,7 @@ function AddPlaylist({ navigation, route }) {
             addPlayist();
           }}
         >
-          <Text style={styles.buttonText}>Add</Text>
+          <Text style={globalStyles.basicText}>Add</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAwareScrollView>
@@ -182,7 +221,6 @@ function AddPlaylist({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: "column",
     padding: 10,
   },
@@ -190,23 +228,20 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
   },
-  playlistNameSeparator: {
-    borderWidth: 1,
-    borderColor: "white",
-    borderStyle: "dashed",
-  },
-  headerText: {
-    fontSize: 20,
-    color: "yellow",
-    alignSelf: "flex-start",
-    fontStyle: "italic",
-  },
-  separatorText: {
-    fontSize: 20,
-    color: "white",
-    alignSelf: "center",
-    fontStyle: "italic",
-  },
+  // playlistNameSeparator: {
+  //   borderWidth: 1,
+  //   borderColor: "white",
+  //   borderStyle: "dashed",
+  // },
+  // headerText: {
+  //   color: "yellow",
+  //   alignSelf: "flex-start",
+  //   fontStyle: "italic",
+  // },
+  // separatorText: {
+  //   alignSelf: "center",
+  //   fontStyle: "italic",
+  // },
   buttonContainer: {
     alignSelf: "center",
     borderRadius: 15,
@@ -220,10 +255,6 @@ const styles = StyleSheet.create({
     backgroundColor: "green",
     alignItems: "center",
     justifyContent: "center",
-  },
-  buttonText: {
-    fontSize: 20,
-    color: "white",
   },
 });
 

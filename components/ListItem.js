@@ -1,15 +1,15 @@
 import React from "react";
 import { Text, TouchableOpacity, Image, StyleSheet } from "react-native";
-import { globalStyles } from "./styles/Styles";
+import { globalStyles } from "../styles/Styles";
 
 function ListItem({ iconUrl, name, onPress }) {
   return (
     <TouchableOpacity
-      style={{ ...styles.container, ...globalStyles.darkBackgroundColor }}
+      style={{ ...styles.container, ...globalStyles.secondaryContainer }}
       onPress={onPress}
     >
       {iconUrl && <Image style={styles.icon} source={{ uri: iconUrl }} />}
-      <Text style={styles.name}>{name}</Text>
+      <Text style={globalStyles.headerText}>{name}</Text>
     </TouchableOpacity>
   );
 }
@@ -31,8 +31,6 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   name: {
-    color: "white",
-    fontWeight: "bold",
     fontSize: 15,
   },
 });

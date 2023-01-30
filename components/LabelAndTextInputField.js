@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
+import { globalStyles } from "../styles/Styles";
 
 function LabelAndTextInputField({
   label,
@@ -10,9 +11,9 @@ function LabelAndTextInputField({
 }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{`${label}`}</Text>
+      <Text style={globalStyles.basicText}>{`${label}`}</Text>
       <TextInput
-        style={styles.textInput}
+        style={globalStyles.textInput}
         textContentType={textContentType}
         value={inputText}
         onChangeText={setInputText}
@@ -29,20 +30,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     marginVertical: 5,
     alignItems: "flex-start",
-  },
-  label: {
-    fontSize: 20,
-    color: "white",
-  },
-  textInput: {
-    borderRadius: 10,
-    borderWidth: 1,
-    padding: 5,
-    backgroundColor: "white",
-    height: 40,
-    fontSize: 15,
-    width: "100%",
-    alignSelf: "center",
   },
 });
 

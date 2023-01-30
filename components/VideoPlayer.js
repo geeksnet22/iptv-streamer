@@ -9,7 +9,7 @@ import {
 import { Video, VideoFullscreenUpdate, ResizeMode } from "expo-av";
 import { StatusBar } from "expo-status-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { globalStyles } from "./styles/Styles";
+import { globalStyles } from "../styles/Styles";
 
 function VideoPlayer({ navigation, route }) {
   const video = useRef(null);
@@ -30,8 +30,7 @@ function VideoPlayer({ navigation, route }) {
   return (
     <View
       style={{
-        ...styles.container,
-        ...globalStyles.containerDarkBackgroundColor,
+        ...globalStyles.primaryContainer,
       }}
     >
       <StatusBar hidden />
@@ -68,9 +67,6 @@ function VideoPlayer({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   activityMonitor: {
     position: "absolute",
     top: "50%",

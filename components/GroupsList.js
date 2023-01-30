@@ -4,8 +4,7 @@ import parser from "iptv-playlist-parser";
 import axios from "axios";
 import SearchBar from "./SearchBar";
 import ListItem from "./ListItem";
-
-const globalStyles = require("./styles/Styles");
+import { globalStyles } from "../styles/Styles";
 
 function GroupsList({ navigation, route }) {
   const [groups, setGroups] = useState({});
@@ -59,8 +58,7 @@ function GroupsList({ navigation, route }) {
   return (
     <SafeAreaView
       style={{
-        ...styles.container,
-        ...globalStyles.containerDarkBackgroundColor,
+        ...globalStyles.primaryContainer,
       }}
     >
       <SearchBar searchText={searchText} setSearchText={setSearchText} />
@@ -82,9 +80,6 @@ function GroupsList({ navigation, route }) {
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   itemListContainer: {
     margin: 5,
     maxWidth: 600,

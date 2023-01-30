@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, TouchableOpacity, StyleSheet } from "react-native";
-import { globalStyles } from "./styles/Styles";
+import { globalStyles } from "../styles/Styles";
 
 function FloatingRoundButton({ style, icon, onPress }) {
   return (
@@ -8,7 +8,7 @@ function FloatingRoundButton({ style, icon, onPress }) {
       style={{
         ...styles.container,
         ...style,
-        ...globalStyles.darkBackgroundColor,
+        ...globalStyles.secondaryContainer,
       }}
       onPress={onPress}
     >

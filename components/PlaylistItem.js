@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, Image, StyleSheet, Alert, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { globalStyles } from "./styles/Styles";
+import { globalStyles } from "../styles/Styles";
 
 const REMOVE_LOGO_LOCATION = "../assets/icons8-remove-48.png";
 
@@ -24,7 +24,7 @@ function PlaylistItem({
 
   return (
     <TouchableOpacity
-      style={{ ...styles.container, ...globalStyles.darkBackgroundColor }}
+      style={{ ...styles.container, ...globalStyles.secondaryContainer }}
       onPress={() =>
         navigation.navigate("GroupsList", {
           playlistName: playlistName,
@@ -32,7 +32,7 @@ function PlaylistItem({
         })
       }
     >
-      <Text style={styles.playlistNameText}>{playlistName}</Text>
+      <Text style={globalStyles.basicText}>{playlistName}</Text>
       <TouchableOpacity
         onPress={() => {
           Alert.alert(
@@ -67,10 +67,6 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomColor: "white",
     borderWidth: 1,
-  },
-  playlistNameText: {
-    color: "white",
-    fontSize: 20,
   },
   deleteLogo: {
     height: 20,
