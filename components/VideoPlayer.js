@@ -38,7 +38,6 @@ function VideoPlayer({ navigation, route }) {
       <Video
         source={{
           uri: replaceFileTypeTsWithM3u8(route.params.uri),
-          overrideFileExtensionAndroid: "m3u8",
         }}
         ref={video}
         rate={1.0}
