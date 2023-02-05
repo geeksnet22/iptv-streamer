@@ -50,6 +50,7 @@ function VideoPlayer({ navigation, route }) {
           Platform.OS === "ios" ? video.current.presentFullscreenPlayer() : {}
         }
         onError={(error) => {
+          console.log(error);
           Alert.alert("Error", "Channel currently not available!!!");
           navigation.goBack();
         }}

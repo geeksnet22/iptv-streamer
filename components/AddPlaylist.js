@@ -12,8 +12,12 @@ import axios from "axios";
 import LabelAndTextInputField from "./LabelAndTextInputField";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
 import { globalStyles } from "../styles/Styles";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { app } from "../config";
 
-const DEFAULT_PORT = 80;
+// const DEFAULT_PORT = 80;
+
+const db = getFirestore(app);
 
 function AddPlaylist({ navigation, route }) {
   const [playlistName, setPlaylistName] = useState("");
@@ -68,17 +72,16 @@ function AddPlaylist({ navigation, route }) {
 
   const setPlaylistValue = async (requestUrl) => {
     try {
-      await AsyncStorage.setItem(playlistName, requestUrl)
-        .then((value) => {
-          navigation.navigate("CurrentPlaylists");
-          Platform.OS === "android"
-            ? ToastAndroid.show(
-                "Playlist successfully added!!!",
-                ToastAndroid.SHORT
-              )
-            : {};
-        })
-        .catch((error) => console.log(error));
+      await AsyncStorage.setItem(playlistName, requestUrl).then((value) => {
+        navigation.navigate("CurrentPlaylists");
+        Platform.OS === "android"
+          ? ToastAndroid.show(
+              "Playlist successfully added!!!",
+              ToastAndroid.SHORT
+            )
+          : {};
+        addPlayistToDb(requestUrl);
+      });
     } catch (e) {
       Alert.alert("Error", "Error saving the playlist. Please try again.");
     }
@@ -100,6 +103,18 @@ function AddPlaylist({ navigation, route }) {
       isValidInputData = false;
     }
     return isValidInputData;
+  };
+
+  const addPlayistToDb = async (requestUrl) => {
+    try {
+      const docRef = await addDoc(collection(db, "playlists"), {
+        name: playlistName,
+        url: requestUrl,
+      });
+      console.log("Playlist successfully added with ID: ", docRef.id);
+    } catch (error) {
+      console.error("Error uploading playlist: ", error);
+    }
   };
 
   // const isValidInputData = () => {
@@ -159,7 +174,7 @@ function AddPlaylist({ navigation, route }) {
           label="Playlist name"
           inputText={playlistName}
           setInputText={setPlaylistName}
-          placeHolder="Could be anything..."
+          placeHolder="Name your playlist..."
           textContentType="name"
         />
         {/* <View style={styles.playlistNameSeparator} /> */}
