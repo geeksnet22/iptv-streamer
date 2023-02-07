@@ -12,12 +12,12 @@ import axios from "axios";
 import LabelAndTextInputField from "./LabelAndTextInputField";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
 import { globalStyles } from "../styles/Styles";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, initializeFirestore } from "firebase/firestore";
 import { app } from "../config";
 
 // const DEFAULT_PORT = 80;
 
-const db = getFirestore(app);
+const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
 function AddPlaylist({ navigation, route }) {
   const [playlistName, setPlaylistName] = useState("");
