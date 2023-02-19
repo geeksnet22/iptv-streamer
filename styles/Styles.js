@@ -26,4 +26,9 @@ export const globalStyles = StyleSheet.create({
     width: "100%",
     alignSelf: "center",
   },
+  activityIndicator: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+  },
 });

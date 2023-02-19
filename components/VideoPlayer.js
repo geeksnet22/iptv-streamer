@@ -10,8 +10,11 @@ import { Video, VideoFullscreenUpdate, ResizeMode } from "expo-av";
 import { StatusBar } from "expo-status-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { globalStyles } from "../styles/Styles";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-function VideoPlayer({ navigation, route }) {
+function VideoPlayer() {
+  const navigation = useNavigation();
+  const route = useRoute();
   const video = useRef(null);
 
   useEffect(() => {
@@ -34,7 +37,7 @@ function VideoPlayer({ navigation, route }) {
       }}
     >
       <StatusBar hidden />
-      <ActivityIndicator style={styles.activityMonitor} />
+      <ActivityIndicator size="large" style={globalStyles.activityIndicator} />
       <Video
         source={{
           uri: replaceFileTypeTsWithM3u8(route.params.uri),
@@ -67,11 +70,6 @@ function VideoPlayer({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  activityMonitor: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-  },
   video: {
     flex: 1,
   },

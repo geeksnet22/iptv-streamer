@@ -6,15 +6,21 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
-import ListItem from "./ListItem";
 import SearchBar from "./SearchBar";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { useIsFocused } from "@react-navigation/native";
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { globalStyles } from "../styles/Styles";
+import ChannelListItem from "./ChannelListItem";
 
-function ChannelsList({ navigation, route }) {
+function ChannelsList() {
   const [searchText, setSearchText] = useState("");
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
+  const route = useRoute();
 
   useEffect(() => {
     if (Platform.OS === "android" && isFocused) {
@@ -24,11 +30,16 @@ function ChannelsList({ navigation, route }) {
     }
   }, [isFocused]);
 
-  const renderItem = ({ item: { id, iconUrl, name, url } }) => (
-    <ListItem
-      id={id}
-      iconUrl={iconUrl}
-      name={name}
+  const renderItem = ({
+    item: {
+      name,
+      url,
+      tvg: { logo },
+    },
+  }) => (
+    <ChannelListItem
+      channelIconUrl={logo}
+      channelName={name}
       onPress={() =>
         navigation.navigate("VideoPlayer", { name: name, uri: url })
       }
@@ -44,17 +55,11 @@ function ChannelsList({ navigation, route }) {
       <SearchBar searchText={searchText} setSearchText={setSearchText} />
       <View style={styles.itemListContainer}>
         <FlatList
-          data={route.params.channelsInfo
-            ?.filter((channel) =>
-              channel.channelName
-                .toUpperCase()
-                .includes(searchText.trim().toUpperCase())
-            )
-            .map((channel) => ({
-              iconUrl: channel.channelLogoUrl,
-              name: channel.channelName,
-              url: channel.channelUrl,
-            }))}
+          data={route.params.channelList?.filter((playlistItem) =>
+            playlistItem.name
+              .toUpperCase()
+              .includes(searchText.trim().toUpperCase())
+          )}
           renderItem={renderItem}
           keyExtractor={(item) => item.name + item.url}
         />

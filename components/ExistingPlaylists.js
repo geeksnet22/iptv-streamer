@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import PlaylistItem from "./PlaylistItem";
-import { useIsFocused } from "@react-navigation/native";
+import ExistingPlaylistItem from "./ExistingPlaylistItem";
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import FloatingRoundButton from "./FloatingRoundButton";
 import { globalStyles } from "../styles/Styles";
 
 const ADD_LOGO_ADDRESS = "../assets/add-gb2bab072c_640.png";
 
-function CurrentPlaylists({ navigation, route }) {
+function ExistingPlaylists() {
   const [playlists, setPlaylists] = useState([]);
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (isFocused) {
-      fetchAndSetCurrentPlaylists();
+      fetchAndSetExistingPlaylists();
     }
   }, [isFocused]);
 
-  const fetchAndSetCurrentPlaylists = async () => {
+  const fetchAndSetExistingPlaylists = async () => {
     try {
       await AsyncStorage.getAllKeys().then((keys) => {
         AsyncStorage.multiGet(keys).then((playlists) =>
@@ -36,13 +41,11 @@ function CurrentPlaylists({ navigation, route }) {
     });
 
   const renderItem = ({ item: { playlistName, playlistUrl } }) => (
-    <PlaylistItem
+    <ExistingPlaylistItem
       key={playlistName}
       playlistName={playlistName}
-      playlistUrl={playlistUrl}
-      navigation={navigation}
-      route={route}
-      fetchAndSetCurrentPlaylists={fetchAndSetCurrentPlaylists}
+      playlistURL={playlistUrl}
+      fetchAndSetExistingPlaylists={fetchAndSetExistingPlaylists}
     />
   );
 
@@ -110,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CurrentPlaylists;
+export default ExistingPlaylists;

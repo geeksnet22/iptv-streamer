@@ -2,22 +2,25 @@ import React from "react";
 import { Text, Image, StyleSheet, Alert, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { globalStyles } from "../styles/Styles";
+import { useNavigation } from "@react-navigation/core";
+import PropTypes from "prop-types";
 
 const REMOVE_LOGO_LOCATION = "../assets/icons8-remove-48.png";
 
-function PlaylistItem({
-  navigation,
-  route,
+function ExistingPlaylistItem({
   playlistName,
-  playlistUrl,
-  fetchAndSetCurrentPlaylists,
+  playlistURL,
+  fetchAndSetExistingPlaylists,
 }) {
+  const navigation = useNavigation();
+
   const removePlaylist = async () => {
     try {
       await AsyncStorage.removeItem(playlistName).then((response) =>
-        fetchAndSetCurrentPlaylists()
+        fetchAndSetExistingPlaylists()
       );
     } catch (e) {
+      console.log(e);
       Alert.alert("Error", "Not able to remove, please try again!!!");
     }
   };
@@ -28,7 +31,7 @@ function PlaylistItem({
       onPress={() =>
         navigation.navigate("GroupsList", {
           playlistName: playlistName,
-          playlistUrl: playlistUrl,
+          playlistURL: playlistURL,
         })
       }
     >
@@ -57,6 +60,10 @@ function PlaylistItem({
   );
 }
 
+ExistingPlaylistItem.propTypes = {
+  playlistName: PropTypes.string.isRequired,
+};
+
 const styles = StyleSheet.create({
   container: {
     padding: 10,
@@ -75,4 +82,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlaylistItem;
+export default ExistingPlaylistItem;

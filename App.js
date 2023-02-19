@@ -1,11 +1,11 @@
-import React from "react";
+import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import GroupsList from "./components/GroupsList";
 import ChannelsList from "./components/ChannelsList";
 import VideoPlayer from "./components/VideoPlayer";
 import AddPlaylist from "./components/AddPlaylist";
-import CurrentPlaylists from "./components/CurrentPlaylists";
+import ExistingPlaylists from "./components/ExistingPlaylists";
 
 const Stack = createStackNavigator();
 
@@ -14,9 +14,9 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="CurrentPlaylists"
-          component={CurrentPlaylists}
-          options={{ title: "Playlists" }}
+          name="ExistingPlaylists"
+          component={ExistingPlaylists}
+          options={{ title: "Existing Playlists" }}
         />
         <Stack.Screen
           name="AddPlaylist"
@@ -31,7 +31,7 @@ function App() {
         <Stack.Screen
           name="ChannelsList"
           component={ChannelsList}
-          options={({ route }) => ({ title: route.params.groupName })}
+          options={({ route }) => ({ title: route.params.groupTitle })}
         />
         <Stack.Screen
           name="VideoPlayer"
