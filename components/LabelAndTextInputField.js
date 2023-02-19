@@ -1,13 +1,15 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
+import PropTypes from "prop-types";
 import { globalStyles } from "../styles/Styles";
 
 function LabelAndTextInputField({
   label,
   inputText,
   setInputText,
-  placeHolder,
+  placeholder,
   textContentType,
+  editable,
 }) {
   return (
     <View style={styles.container}>
@@ -17,9 +19,10 @@ function LabelAndTextInputField({
         textContentType={textContentType}
         value={inputText}
         onChangeText={setInputText}
-        placeholder={placeHolder}
+        placeholder={placeholder}
         autoCapitalize="none"
         autoComplete="off"
+        editable={editable}
       />
     </View>
   );
@@ -32,5 +35,14 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
 });
+
+LabelAndTextInputField.propTypes = {
+  label: PropTypes.string.isRequired,
+  inputText: PropTypes.string.isRequired,
+  setInputText: PropTypes.func.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  textContentType: PropTypes.string.isRequired,
+  editable: PropTypes.bool.isRequired,
+};
 
 export default LabelAndTextInputField;

@@ -13,7 +13,12 @@ import axios from "axios";
 import LabelAndTextInputField from "./LabelAndTextInputField";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
 import { globalStyles } from "../styles/Styles";
-import { collection, addDoc, initializeFirestore } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  initializeFirestore,
+  serverTimestamp,
+} from "firebase/firestore";
 import { app } from "../config";
 import { useNavigation, useRoute } from "@react-navigation/core";
 
@@ -90,6 +95,7 @@ function AddPlaylist() {
       const docRef = await addDoc(collection(db, "playlists"), {
         name: playlistName,
         url: playlistURL.trim(),
+        createdAt: serverTimestamp(),
       });
       console.log("Playlist successfully added with ID: ", docRef.id);
     } catch (error) {
@@ -115,23 +121,24 @@ function AddPlaylist() {
           label="Playlist name"
           inputText={playlistName}
           setInputText={setPlaylistName}
-          placeHolder="Name your playlist..."
+          placeholder="Name your playlist..."
           textContentType="name"
+          editable={!showActivityIndicator}
         />
         <LabelAndTextInputField
           label="M3U Playlist URL"
           inputText={playlistURL}
           setInputText={setplaylistURL}
-          placeHolder="Playlist URL..."
+          placeholder="Playlist URL..."
           textContentType="URL"
+          editable={!showActivityIndicator}
         />
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => {
-            addPlayist();
-          }}
+          disabled={showActivityIndicator}
+          style={{ ...styles.addButton }}
+          onPress={() => addPlayist()}
         >
           <Text style={globalStyles.basicText}>Add</Text>
         </TouchableOpacity>
