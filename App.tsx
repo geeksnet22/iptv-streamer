@@ -1,44 +1,46 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import GroupsList from "./components/GroupsList";
-import ChannelsList from "./components/ChannelsList";
 import VideoPlayer from "./components/VideoPlayer";
 import AddPlaylist from "./components/AddPlaylist";
 import ExistingPlaylists from "./components/ExistingPlaylists";
+import GroupList from "./components/GroupList";
+import ChannelList from "./components/ChannelList";
+import { RootStackParamList } from "./types";
 
-const Stack = createStackNavigator();
+const App = () => {
+  
+  const RootStack = createStackNavigator<RootStackParamList>();
 
-function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
+      <RootStack.Navigator>
+        <RootStack.Screen
           name="ExistingPlaylists"
           component={ExistingPlaylists}
           options={{ title: "Existing Playlists" }}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="AddPlaylist"
           component={AddPlaylist}
           options={{ title: "New Playlist" }}
         />
-        <Stack.Screen
-          name="GroupsList"
-          component={GroupsList}
+        <RootStack.Screen
+          name="GroupList"
+          component={GroupList}
           options={({ route }) => ({ title: route.params.playlistName })}
         />
-        <Stack.Screen
-          name="ChannelsList"
-          component={ChannelsList}
+        <RootStack.Screen
+          name="ChannelList"
+          component={ChannelList}
           options={({ route }) => ({ title: route.params.groupTitle })}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="VideoPlayer"
           component={VideoPlayer}
           options={{ headerShown: false }}
         />
-      </Stack.Navigator>
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 }

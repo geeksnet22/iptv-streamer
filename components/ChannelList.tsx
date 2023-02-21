@@ -10,17 +10,18 @@ import SearchBar from "./SearchBar";
 import * as ScreenOrientation from "expo-screen-orientation";
 import {
   useIsFocused,
-  useNavigation,
-  useRoute,
 } from "@react-navigation/native";
-import { globalStyles } from "../styles/Styles";
 import ChannelListItem from "./ChannelListItem";
+import { Styles } from "../styles/Styles";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types";
+import { PlaylistItem } from "iptv-playlist-parser";
 
-function ChannelsList() {
+type Props = NativeStackScreenProps<RootStackParamList, "ChannelList">;
+
+const ChannelList = ({route, navigation}: Props) => {
   const [searchText, setSearchText] = useState("");
   const isFocused = useIsFocused();
-  const navigation = useNavigation();
-  const route = useRoute();
 
   useEffect(() => {
     if (Platform.OS === "android" && isFocused) {
@@ -30,18 +31,24 @@ function ChannelsList() {
     }
   }, [isFocused]);
 
+  type ItemProps = {
+    name: string,
+    url: string,
+    tvg: {
+      logo: string
+    },
+  }
+
   const renderItem = ({
-    item: {
       name,
       url,
       tvg: { logo },
-    },
-  }) => (
+  }: ItemProps) => (
     <ChannelListItem
       channelIconUrl={logo}
       channelName={name}
       onPress={() =>
-        navigation.navigate("VideoPlayer", { name: name, uri: url })
+        navigation.navigate("VideoPlayer", { uri: url })
       }
     />
   );
@@ -49,7 +56,7 @@ function ChannelsList() {
   return (
     <SafeAreaView
       style={{
-        ...globalStyles.primaryContainer,
+        ...Styles.globalStyles.primaryContainer,
       }}
     >
       <SearchBar searchText={searchText} setSearchText={setSearchText} />
@@ -60,7 +67,7 @@ function ChannelsList() {
               .toUpperCase()
               .includes(searchText.trim().toUpperCase())
           )}
-          renderItem={renderItem}
+          renderItem={({item}) => renderItem(item)}
           keyExtractor={(item) => item.name + item.url}
         />
       </View>
@@ -76,4 +83,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChannelsList;
+export default ChannelList;

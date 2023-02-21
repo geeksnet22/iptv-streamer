@@ -1,27 +1,26 @@
-import React from "react";
+import React = require("react");
 import { Text, TouchableOpacity, Image, StyleSheet } from "react-native";
-import PropTypes from "prop-types";
-import { globalStyles } from "../styles/Styles";
+import { Styles } from "../styles/Styles";
 
-function GroupListItem({ groupName, groupIconUrl, onPress }) {
+type Props = {
+  groupName: string;
+  groupIconUrl?: string;
+  onPress: () => void;
+};
+
+const GroupListItem = ({ groupName, groupIconUrl, onPress }: Props) => {
   return (
     <TouchableOpacity
-      style={{ ...styles.container, ...globalStyles.secondaryContainer }}
+      style={{ ...styles.container, ...Styles.globalStyles.secondaryContainer }}
       onPress={onPress}
     >
       {groupIconUrl && (
         <Image style={styles.icon} source={{ uri: groupIconUrl }} />
       )}
-      <Text style={globalStyles.headerText}>{groupName}</Text>
+      <Text style={Styles.globalStyles.headerText}>{groupName}</Text>
     </TouchableOpacity>
   );
 }
-
-GroupListItem.propTypes = {
-  groupName: PropTypes.string.isRequired,
-  groupIconUrl: PropTypes.string,
-  onPress: PropTypes.func.isRequired,
-};
 
 const styles = StyleSheet.create({
   container: {

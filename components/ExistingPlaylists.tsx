@@ -5,17 +5,20 @@ import ExistingPlaylistItem from "./ExistingPlaylistItem";
 import {
   useIsFocused,
   useNavigation,
-  useRoute,
 } from "@react-navigation/native";
 import FloatingRoundButton from "./FloatingRoundButton";
-import { globalStyles } from "../styles/Styles";
+import { Styles } from "../styles/Styles";
+import { KeyValuePair } from "@react-native-async-storage/async-storage/lib/typescript/types";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types";
 
 const ADD_LOGO_ADDRESS = "../assets/add-gb2bab072c_640.png";
 
-function ExistingPlaylists() {
-  const [playlists, setPlaylists] = useState([]);
+type Props = NativeStackScreenProps<RootStackParamList, "ExistingPlaylists">;
+
+const ExistingPlaylists = ({navigation}: Props) => {
+  const [playlists, setPlaylists] = useState<readonly KeyValuePair[]>([] as readonly KeyValuePair[]);
   const isFocused = useIsFocused();
-  const navigation = useNavigation();
 
   useEffect(() => {
     if (isFocused) {
@@ -40,12 +43,17 @@ function ExistingPlaylists() {
       existingPlaylistNames: playlists.map((playlist) => playlist[0]),
     });
 
-  const renderItem = ({ item: { playlistName, playlistUrl } }) => (
+  type ItemProps = {
+    playlistName: string;
+    playlistUrl: string | null;
+  }
+
+  const renderItem = ({ playlistName, playlistUrl }: ItemProps) => (
     <ExistingPlaylistItem
-      key={playlistName}
       playlistName={playlistName}
       playlistURL={playlistUrl}
       fetchAndSetExistingPlaylists={fetchAndSetExistingPlaylists}
+      navigation={navigation}
     />
   );
 
@@ -55,19 +63,19 @@ function ExistingPlaylists() {
         playlists.length === 0
           ? {
               ...styles.container,
-              ...globalStyles.primaryContainer,
+              ...Styles.globalStyles.primaryContainer,
               justifyContent: "center",
             }
           : {
               ...styles.container,
-              ...globalStyles.primaryContainer,
+              ...Styles.globalStyles.primaryContainer,
             }
       }
     >
       {playlists.length === 0 ? (
         <Text
           style={{
-            ...globalStyles.basicText,
+            ...Styles.globalStyles.basicText,
             alignSelf: "center",
             fontStyle: "italic",
             flexDirection: "column",
@@ -82,7 +90,11 @@ function ExistingPlaylists() {
             playlistName: playlist[0],
             playlistUrl: playlist[1],
           }))}
-          renderItem={renderItem}
+          renderItem={({item}) => renderItem(
+            {
+            playlistName: item.playlistName, 
+            playlistUrl: item.playlistUrl
+          })}
           keyExtractor={(item) => item.playlistName}
         />
       </View>

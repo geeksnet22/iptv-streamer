@@ -1,21 +1,30 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import PropTypes from "prop-types";
-import { globalStyles } from "../styles/Styles";
+import { TextInputProps } from "react-native";
+import { Styles } from "../styles/Styles";
 
-function LabelAndTextInputField({
+type Props = {
+  label: String,
+  inputText: string,
+  setInputText: React.Dispatch<React.SetStateAction<string>>,
+  placeholder: string,
+  textContentType: TextInputProps["textContentType"],
+  editable: boolean
+}
+
+const LabelAndTextInputField = ({
   label,
   inputText,
   setInputText,
   placeholder,
   textContentType,
   editable,
-}) {
+}: Props) => {
   return (
     <View style={styles.container}>
-      <Text style={globalStyles.basicText}>{`${label}`}</Text>
+      <Text style={Styles.globalStyles.basicText}>{`${label}`}</Text>
       <TextInput
-        style={globalStyles.textInput}
+        style={Styles.globalStyles.textInput}
         textContentType={textContentType}
         value={inputText}
         onChangeText={setInputText}
@@ -35,14 +44,5 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
 });
-
-LabelAndTextInputField.propTypes = {
-  label: PropTypes.string.isRequired,
-  inputText: PropTypes.string.isRequired,
-  setInputText: PropTypes.func.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  textContentType: PropTypes.string.isRequired,
-  editable: PropTypes.bool.isRequired,
-};
 
 export default LabelAndTextInputField;

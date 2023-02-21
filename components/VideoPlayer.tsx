@@ -1,21 +1,23 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   View,
   StyleSheet,
   ActivityIndicator,
   Alert,
   Platform,
+  StatusBar,
 } from "react-native";
 import { Video, VideoFullscreenUpdate, ResizeMode } from "expo-av";
-import { StatusBar } from "expo-status-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { globalStyles } from "../styles/Styles";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { Styles } from "../styles/Styles";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types";
+import * as React from "react";
 
-function VideoPlayer() {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const video = useRef(null);
+type Props = NativeStackScreenProps<RootStackParamList, "VideoPlayer">;
+
+const VideoPlayer = ({route, navigation}: Props) => {
+  const video = useRef<Video>(null);
 
   useEffect(() => {
     if (Platform.OS === "android") {
@@ -25,7 +27,7 @@ function VideoPlayer() {
     }
   }, []);
 
-  const replaceFileTypeTsWithM3u8 = (originalUrl) =>
+  const replaceFileTypeTsWithM3u8 = (originalUrl: string) =>
     originalUrl?.slice(originalUrl.length - 2) === "ts"
       ? originalUrl?.substring(0, originalUrl?.length - 2) + "m3u8"
       : originalUrl;
@@ -33,11 +35,11 @@ function VideoPlayer() {
   return (
     <View
       style={{
-        ...globalStyles.primaryContainer,
+        ...Styles.globalStyles.primaryContainer,
       }}
     >
       <StatusBar hidden />
-      <ActivityIndicator size="large" style={globalStyles.activityIndicator} />
+      <ActivityIndicator size="large" style={Styles.globalStyles.activityIndicator} />
       <Video
         source={{
           uri: replaceFileTypeTsWithM3u8(route.params.uri),
@@ -49,7 +51,7 @@ function VideoPlayer() {
         shouldPlay
         useNativeControls
         onLoad={() =>
-          Platform.OS === "ios" ? video.current.presentFullscreenPlayer() : {}
+          Platform.OS === "ios" && video.current ? video.current.presentFullscreenPlayer() : {}
         }
         onError={(error) => {
           console.log(error);

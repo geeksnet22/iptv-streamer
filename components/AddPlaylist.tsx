@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,12 +7,12 @@ import {
   TouchableOpacity,
   ToastAndroid,
   ActivityIndicator,
+  Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import LabelAndTextInputField from "./LabelAndTextInputField";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
-import { globalStyles } from "../styles/Styles";
 import {
   collection,
   addDoc,
@@ -20,17 +20,19 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { app } from "../config";
-import { useNavigation, useRoute } from "@react-navigation/core";
+import { Styles } from "../styles/Styles";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React = require("react");
+import { RootStackParamList } from "../types";
 
 const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
-function AddPlaylist() {
+type Props = NativeStackScreenProps<RootStackParamList, "AddPlaylist">;
+
+function AddPlaylist({route, navigation}: Props) {
   const [playlistName, setPlaylistName] = useState("");
   const [playlistURL, setplaylistURL] = useState("");
   const [showActivityIndicator, setShowActivityIndicator] = useState(false);
-  const navigation = useNavigation();
-  const route = useRoute();
-
   const addPlayist = () => {
     if (!isValidInputData()) {
       return;
@@ -82,7 +84,7 @@ function AddPlaylist() {
               ToastAndroid.SHORT
             )
           : {};
-        addPlayistToDb();
+        // addPlayistToDb();
       });
     } catch (e) {
       console.log(e);
@@ -104,17 +106,17 @@ function AddPlaylist() {
   };
 
   return (
-    <KeyboardAwareScrollView
+    <KeyboardAvoidingView
       style={{
         ...styles.container,
-        ...globalStyles.primaryContainer,
+        ...Styles.globalStyles.primaryContainer,
       }}
       contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
     >
       <View
         style={{
           ...styles.credentialsContainer,
-          ...globalStyles.secondaryContainer,
+          ...Styles.globalStyles.secondaryContainer,
         }}
       >
         <LabelAndTextInputField
@@ -140,20 +142,20 @@ function AddPlaylist() {
           style={{ ...styles.addButton }}
           onPress={() => addPlayist()}
         >
-          <Text style={globalStyles.basicText}>Add</Text>
+          <Text style={Styles.globalStyles.basicText}>Add</Text>
         </TouchableOpacity>
       </View>
       {showActivityIndicator ? (
         <ActivityIndicator
           size="large"
           style={{
-            ...globalStyles.activityIndicator,
+            ...Styles.globalStyles.activityIndicator,
           }}
         />
       ) : (
         <></>
       )}
-    </KeyboardAwareScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

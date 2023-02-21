@@ -1,18 +1,26 @@
 import React from "react";
 import { Text, Image, StyleSheet, Alert, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { globalStyles } from "../styles/Styles";
 import { useNavigation } from "@react-navigation/core";
-import PropTypes from "prop-types";
+import { Styles } from "../styles/Styles";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types";
 
 const REMOVE_LOGO_LOCATION = "../assets/icons8-remove-48.png";
 
-function ExistingPlaylistItem({
+type Props = {
+  playlistName: string,
+  playlistURL: string | null,
+  fetchAndSetExistingPlaylists: () => void,
+  navigation: NativeStackNavigationProp<RootStackParamList, "ExistingPlaylists", undefined>
+}
+
+const ExistingPlaylistItem = ({
   playlistName,
   playlistURL,
   fetchAndSetExistingPlaylists,
-}) {
-  const navigation = useNavigation();
+  navigation
+}: Props) => {
 
   const removePlaylist = async () => {
     try {
@@ -27,15 +35,15 @@ function ExistingPlaylistItem({
 
   return (
     <TouchableOpacity
-      style={{ ...styles.container, ...globalStyles.secondaryContainer }}
+      style={{ ...styles.container, ...Styles.globalStyles.secondaryContainer }}
       onPress={() =>
-        navigation.navigate("GroupsList", {
+        navigation.navigate("GroupList", {
           playlistName: playlistName,
           playlistURL: playlistURL,
         })
       }
     >
-      <Text style={globalStyles.basicText}>{playlistName}</Text>
+      <Text style={Styles.globalStyles.basicText}>{playlistName}</Text>
       <TouchableOpacity
         onPress={() => {
           Alert.alert(
@@ -59,10 +67,6 @@ function ExistingPlaylistItem({
     </TouchableOpacity>
   );
 }
-
-ExistingPlaylistItem.propTypes = {
-  playlistName: PropTypes.string.isRequired,
-};
 
 const styles = StyleSheet.create({
   container: {

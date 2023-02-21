@@ -1,29 +1,32 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { SafeAreaView, StyleSheet, View, Alert, FlatList } from "react-native";
 import SearchBar from "./SearchBar";
-import { globalStyles } from "../styles/Styles";
-import { useNavigation, useRoute } from "@react-navigation/core";
 import GroupListItem from "./GroupListItem";
 import axios from "axios";
-import parser from "iptv-playlist-parser";
+import { parse, Playlist, PlaylistItem } from "iptv-playlist-parser";
 import { ActivityIndicator } from "react-native";
+import React = require("react");
+import { Styles } from "../styles/Styles";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types";
 
-function GroupsList() {
-  const [parsedData, setParsedData] = useState({});
+type Props = NativeStackScreenProps<RootStackParamList, "GroupList">;
+
+const GroupList = ({navigation, route}: Props) => {
+  const [parsedData, setParsedData] = useState<Playlist | null>(null);
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const navigation = useNavigation();
-  const route = useRoute();
 
   useEffect(() => {
     fetchAndSetPlaylistsData();
   }, []);
 
-  fetchAndSetPlaylistsData = async () => {
-    axios
+  const fetchAndSetPlaylistsData = async () => {
+    if (route.params.playlistURL) {
+      axios
       .get(route.params.playlistURL)
       .then((response) => {
-        setParsedData(parser.parse(response.data));
+        setParsedData(parse(response.data));
         setIsLoading(false);
       })
       .catch((e) => {
@@ -31,17 +34,19 @@ function GroupsList() {
         setIsLoading(false);
         Alert.alert("Error", "Error loading playlist. Please try again!!!");
       });
+    }
   };
 
-  const renderGroupItem = ({ item }) => {
+
+  const renderGroupItem = (playlistItem: PlaylistItem) => {
     return (
       <GroupListItem
-        groupName={item.group.title}
+        groupName={playlistItem.group.title}
         onPress={() =>
-          navigation.navigate("ChannelsList", {
-            groupTitle: item.group.title,
-            channelList: parsedData.items?.filter(
-              (playistItem) => playistItem.group.title === item.group.title
+          navigation.navigate("ChannelList", {
+            groupTitle: playlistItem.group.title,
+            channelList: parsedData?.items.filter(
+              (playistItem) => playistItem.group.title === playistItem.group.title
             ),
           })
         }
@@ -52,7 +57,7 @@ function GroupsList() {
   return (
     <SafeAreaView
       style={{
-        ...globalStyles.primaryContainer,
+        ...Styles.globalStyles.primaryContainer,
       }}
     >
       <SearchBar searchText={searchText} setSearchText={setSearchText} />
@@ -60,7 +65,7 @@ function GroupsList() {
         <FlatList
           data={[
             ...new Map(
-              parsedData.items?.map((playistItem) => [
+              parsedData?.items.map((playistItem) => [
                 playistItem.group.title,
                 playistItem,
               ])
@@ -70,14 +75,14 @@ function GroupsList() {
               .toUpperCase()
               .includes(searchText.trim().toUpperCase())
           )}
-          renderItem={renderGroupItem}
+          renderItem={({item}) => renderGroupItem(item)}
           keyExtractor={(item) => item.group.title}
         />
       </View>
       {isLoading ? (
         <ActivityIndicator
           size="large"
-          style={globalStyles.activityIndicator}
+          style={Styles.globalStyles.activityIndicator}
         />
       ) : (
         <></>
@@ -93,4 +98,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroupsList;
+export default GroupList;

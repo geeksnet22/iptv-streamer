@@ -1,16 +1,21 @@
 import React from "react";
 import { Image, TouchableOpacity, StyleSheet } from "react-native";
-import { globalStyles } from "../styles/Styles";
-import PropTypes from "prop-types";
+import { Styles } from "../styles/Styles";
 
-function FloatingRoundButton({ style, icon, onPress }) {
+type Props = {
+  style: React.CSSProperties,
+  icon: number,
+  onPress: () => void
+}
+
+const FloatingRoundButton = ({ style, icon, onPress }: Props) => {
   return (
     <TouchableOpacity
-      style={{
-        ...styles.container,
-        ...style,
-        ...globalStyles.secondaryContainer,
-      }}
+      // style={{
+      //   ...styles.container,
+      //   ...style,
+      //   ...Styles.globalStyles.secondaryContainer,
+      // }}
       onPress={onPress}
     >
       <Image style={styles.image} source={icon} />
@@ -31,11 +36,5 @@ const styles = StyleSheet.create({
     width: 30,
   },
 });
-
-FloatingRoundButton.propTypes = {
-  style: PropTypes.object.isRequired,
-  icon: PropTypes.number.isRequired,
-  onPress: PropTypes.func.isRequired,
-};
 
 export default FloatingRoundButton;

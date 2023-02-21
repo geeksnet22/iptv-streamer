@@ -1,7 +1,12 @@
-import React from "react";
+import React = require("react");
 import { TextInput, StyleSheet } from "react-native";
 
-function SearchBar({ searchText, setSearchText }) {
+type Props = {
+  searchText: string,
+  setSearchText: React.Dispatch<React.SetStateAction<string>>
+}
+
+function SearchBar({ searchText, setSearchText }: Props) {
   return (
     <TextInput
       style={styles.textInput}
