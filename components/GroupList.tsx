@@ -75,7 +75,7 @@ const GroupList = ({navigation, route}: Props) => {
               .toUpperCase()
               .includes(searchText.trim().toUpperCase())
           )}
-          renderItem={({item}: PlaylistItem) => renderGroupItem(item)}
+          renderItem={({item}) => renderGroupItem(item)}
           keyExtractor={(item: PlaylistItem) => item.group.title}
         />
       </View>

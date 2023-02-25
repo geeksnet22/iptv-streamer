@@ -51,7 +51,7 @@ const VideoPlayer = ({route, navigation}: Props) => {
         shouldPlay
         useNativeControls
         onLoad={() =>
-          Platform.OS === "ios" && video.current ? video.current.presentFullscreenPlayer() : {}
+          Platform.OS === "ios" && video.current ? video.current.presentFullscreenPlayer() : () => {}
         }
         onError={(error) => {
           console.log(error);
