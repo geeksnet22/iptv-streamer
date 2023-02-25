@@ -4,7 +4,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import ExistingPlaylistItem from "./ExistingPlaylistItem";
 import {
   useIsFocused,
-  useNavigation,
 } from "@react-navigation/native";
 import FloatingRoundButton from "./FloatingRoundButton";
 import { Styles } from "../styles/Styles";

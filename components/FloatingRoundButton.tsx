@@ -11,11 +11,11 @@ type Props = {
 const FloatingRoundButton = ({ style, icon, onPress }: Props) => {
   return (
     <TouchableOpacity
-      // style={{
-      //   ...styles.container,
-      //   ...style,
-      //   ...Styles.globalStyles.secondaryContainer,
-      // }}
+      style={{
+        ...styles.container,
+        ...style,
+        ...Styles.globalStyles.secondaryContainer,
+      }}
       onPress={onPress}
     >
       <Image style={styles.image} source={icon} />
