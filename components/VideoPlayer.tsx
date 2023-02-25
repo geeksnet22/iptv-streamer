@@ -29,7 +29,7 @@ const VideoPlayer = ({ route, navigation }: Props) => {
     }
   }, []);
 
-  const replaceFileTypeTsWithM3u8 = (originalUrl: string) =>
+  const replaceFileTypeTsWithM3u8 = (originalUrl: string): string =>
     originalUrl?.slice(originalUrl.length - 2) === 'ts'
       ? originalUrl?.substring(0, originalUrl?.length - 2) + 'm3u8'
       : originalUrl;
@@ -58,7 +58,7 @@ const VideoPlayer = ({ route, navigation }: Props) => {
         onLoad={() =>
           Platform.OS === 'ios' && video.current
             ? video.current.presentFullscreenPlayer()
-            : () => {}
+            : {}
         }
         onError={(error) => {
           console.log(error);
@@ -69,7 +69,7 @@ const VideoPlayer = ({ route, navigation }: Props) => {
           Platform.OS === 'ios' &&
           event.fullscreenUpdate === VideoFullscreenUpdate.PLAYER_WILL_DISMISS
             ? navigation.goBack()
-            : () => {}
+            : {}
         }
         style={styles.video}
         collapsable={true}

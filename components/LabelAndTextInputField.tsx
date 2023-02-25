@@ -6,7 +6,7 @@ import { TextInputProps } from 'react-native';
 import { Styles } from '../styles/Styles';
 
 type Props = {
-  label: String;
+  label: string;
   inputText: string;
   setInputText: React.Dispatch<React.SetStateAction<string>>;
   placeholder: string;
