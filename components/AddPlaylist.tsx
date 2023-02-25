@@ -1,4 +1,6 @@
-import { useState } from "react";
+/** @format */
+
+import { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,29 +11,29 @@ import {
   ActivityIndicator,
   Platform,
   KeyboardAvoidingView,
-} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import LabelAndTextInputField from "./LabelAndTextInputField";
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import LabelAndTextInputField from './LabelAndTextInputField';
 import {
   collection,
   addDoc,
   initializeFirestore,
   serverTimestamp,
-} from "firebase/firestore";
-import { app } from "../config";
-import { Styles } from "../styles/Styles";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import * as React from "react";
-import { RootStackParamList } from "../types";
+} from 'firebase/firestore';
+import { app } from '../config';
+import { Styles } from '../styles/Styles';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import * as React from 'react';
+import { RootStackParamList } from '../types';
 
 const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
-type Props = NativeStackScreenProps<RootStackParamList, "AddPlaylist">;
+type Props = NativeStackScreenProps<RootStackParamList, 'AddPlaylist'>;
 
-function AddPlaylist({route, navigation}: Props) {
-  const [playlistName, setPlaylistName] = useState("");
-  const [playlistURL, setplaylistURL] = useState("");
+function AddPlaylist({ route, navigation }: Props) {
+  const [playlistName, setPlaylistName] = useState('');
+  const [playlistURL, setplaylistURL] = useState('');
   const [showActivityIndicator, setShowActivityIndicator] = useState(false);
   const addPlayist = () => {
     if (!isValidInputData()) {
@@ -47,27 +49,27 @@ function AddPlaylist({route, navigation}: Props) {
         console.log(e);
         setShowActivityIndicator(false);
         Alert.alert(
-          "Error",
-          "Not a valid playlist, please try a different URL!!!"
+          'Error',
+          'Not a valid playlist, please try a different URL!!!'
         );
       });
   };
 
   const isValidInputData = () => {
     let isValidInputData = true;
-    if (playlistName === "") {
-      Alert.alert("Error", "Please enter playist name!!!");
+    if (playlistName === '') {
+      Alert.alert('Error', 'Please enter playist name!!!');
       isValidInputData = false;
     } else if (
       route.params.existingPlaylistNames.includes(playlistName.trim())
     ) {
       Alert.alert(
-        "Error",
+        'Error',
         `Playlist with name ${playlistName.trim()} already exists. Please use a different name!!!`
       );
       isValidInputData = false;
-    } else if (playlistURL === "") {
-      Alert.alert("Error", "Please enter playlist url!!!");
+    } else if (playlistURL === '') {
+      Alert.alert('Error', 'Please enter playlist url!!!');
       isValidInputData = false;
     }
     return isValidInputData;
@@ -77,10 +79,10 @@ function AddPlaylist({route, navigation}: Props) {
     try {
       await AsyncStorage.setItem(playlistName, playlistURL).then((value) => {
         setShowActivityIndicator(false);
-        navigation.navigate("ExistingPlaylists");
-        Platform.OS === "android"
+        navigation.navigate('ExistingPlaylists');
+        Platform.OS === 'android'
           ? ToastAndroid.show(
-              "Playlist successfully added!!!",
+              'Playlist successfully added!!!',
               ToastAndroid.SHORT
             )
           : {};
@@ -88,20 +90,20 @@ function AddPlaylist({route, navigation}: Props) {
       });
     } catch (e) {
       console.log(e);
-      Alert.alert("Error", "Error saving the playlist. Please try again.");
+      Alert.alert('Error', 'Error saving the playlist. Please try again.');
     }
   };
 
   const addPlayistToDb = async () => {
     try {
-      const docRef = await addDoc(collection(db, "playlists"), {
+      const docRef = await addDoc(collection(db, 'playlists'), {
         name: playlistName,
         url: playlistURL.trim(),
         createdAt: serverTimestamp(),
       });
-      console.log("Playlist successfully added with ID: ", docRef.id);
+      console.log('Playlist successfully added with ID: ', docRef.id);
     } catch (error) {
-      console.error("Error uploading playlist: ", error);
+      console.error('Error uploading playlist: ', error);
     }
   };
 
@@ -111,7 +113,7 @@ function AddPlaylist({route, navigation}: Props) {
         ...styles.container,
         ...Styles.globalStyles.primaryContainer,
       }}
-      contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+      contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
     >
       <View
         style={{
@@ -161,7 +163,7 @@ function AddPlaylist({route, navigation}: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "column",
+    flexDirection: 'column',
     padding: 10,
   },
   credentialsContainer: {
@@ -169,7 +171,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   buttonContainer: {
-    alignSelf: "center",
+    alignSelf: 'center',
     borderRadius: 15,
     marginVertical: 10,
   },
@@ -178,9 +180,9 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: "green",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'green',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

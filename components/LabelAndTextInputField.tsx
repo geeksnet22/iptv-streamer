@@ -1,16 +1,18 @@
-import React from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
-import { TextInputProps } from "react-native";
-import { Styles } from "../styles/Styles";
+/** @format */
+
+import React from 'react';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { TextInputProps } from 'react-native';
+import { Styles } from '../styles/Styles';
 
 type Props = {
-  label: String,
-  inputText: string,
-  setInputText: React.Dispatch<React.SetStateAction<string>>,
-  placeholder: string,
-  textContentType: TextInputProps["textContentType"],
-  editable: boolean
-}
+  label: String;
+  inputText: string;
+  setInputText: React.Dispatch<React.SetStateAction<string>>;
+  placeholder: string;
+  textContentType: TextInputProps['textContentType'];
+  editable: boolean;
+};
 
 const LabelAndTextInputField = ({
   label,
@@ -35,13 +37,13 @@ const LabelAndTextInputField = ({
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "column",
+    flexDirection: 'column',
     marginVertical: 5,
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
   },
 });
 

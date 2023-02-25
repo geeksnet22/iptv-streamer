@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import ExistingPlaylistItem from "./ExistingPlaylistItem";
-import {
-  useIsFocused,
-} from "@react-navigation/native";
-import FloatingRoundButton from "./FloatingRoundButton";
-import { Styles } from "../styles/Styles";
-import { KeyValuePair } from "@react-native-async-storage/async-storage/lib/typescript/types";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types";
+/** @format */
 
-const ADD_LOGO_ADDRESS = "../assets/add-gb2bab072c_640.png";
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ExistingPlaylistItem from './ExistingPlaylistItem';
+import { useIsFocused } from '@react-navigation/native';
+import FloatingRoundButton from './FloatingRoundButton';
+import { Styles } from '../styles/Styles';
+import { KeyValuePair } from '@react-native-async-storage/async-storage/lib/typescript/types';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types';
 
-type Props = NativeStackScreenProps<RootStackParamList, "ExistingPlaylists">;
+const ADD_LOGO_ADDRESS = '../assets/add-gb2bab072c_640.png';
 
-const ExistingPlaylists = ({navigation}: Props) => {
-  const [playlists, setPlaylists] = useState<readonly KeyValuePair[]>([] as readonly KeyValuePair[]);
+type Props = NativeStackScreenProps<RootStackParamList, 'ExistingPlaylists'>;
+
+const ExistingPlaylists = ({ navigation }: Props) => {
+  const [playlists, setPlaylists] = useState<readonly KeyValuePair[]>(
+    [] as readonly KeyValuePair[]
+  );
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -38,14 +40,14 @@ const ExistingPlaylists = ({navigation}: Props) => {
   };
 
   const buttonOnPress = () =>
-    navigation.navigate("AddPlaylist", {
+    navigation.navigate('AddPlaylist', {
       existingPlaylistNames: playlists.map((playlist) => playlist[0]),
     });
 
   type ItemProps = {
     playlistName: string;
     playlistUrl: string | null;
-  }
+  };
 
   const renderItem = ({ playlistName, playlistUrl }: ItemProps) => (
     <ExistingPlaylistItem
@@ -63,7 +65,7 @@ const ExistingPlaylists = ({navigation}: Props) => {
           ? {
               ...styles.container,
               ...Styles.globalStyles.primaryContainer,
-              justifyContent: "center",
+              justifyContent: 'center',
             }
           : {
               ...styles.container,
@@ -75,9 +77,9 @@ const ExistingPlaylists = ({navigation}: Props) => {
         <Text
           style={{
             ...Styles.globalStyles.basicText,
-            alignSelf: "center",
-            fontStyle: "italic",
-            flexDirection: "column",
+            alignSelf: 'center',
+            fontStyle: 'italic',
+            flexDirection: 'column',
           }}
         >
           Please add a playlist
@@ -89,11 +91,12 @@ const ExistingPlaylists = ({navigation}: Props) => {
             playlistName: playlist[0],
             playlistUrl: playlist[1],
           }))}
-          renderItem={({item}) => renderItem(
-            {
-            playlistName: item.playlistName, 
-            playlistUrl: item.playlistUrl
-          })}
+          renderItem={({ item }) =>
+            renderItem({
+              playlistName: item.playlistName,
+              playlistUrl: item.playlistUrl,
+            })
+          }
           keyExtractor={(item) => item.playlistName}
         />
       </View>
@@ -105,7 +108,7 @@ const ExistingPlaylists = ({navigation}: Props) => {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -117,7 +120,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   floatingButton: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     right: 0,
     margin: 30,

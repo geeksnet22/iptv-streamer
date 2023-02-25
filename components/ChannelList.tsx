@@ -1,30 +1,29 @@
-import React, { useEffect, useState } from "react";
+/** @format */
+
+import React, { useEffect, useState } from 'react';
 import {
   View,
   FlatList,
   SafeAreaView,
   StyleSheet,
   Platform,
-} from "react-native";
-import SearchBar from "./SearchBar";
-import * as ScreenOrientation from "expo-screen-orientation";
-import {
-  useIsFocused,
-} from "@react-navigation/native";
-import ChannelListItem from "./ChannelListItem";
-import { Styles } from "../styles/Styles";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types";
-import { PlaylistItem } from "iptv-playlist-parser";
+} from 'react-native';
+import SearchBar from './SearchBar';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import { useIsFocused } from '@react-navigation/native';
+import ChannelListItem from './ChannelListItem';
+import { Styles } from '../styles/Styles';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types';
 
-type Props = NativeStackScreenProps<RootStackParamList, "ChannelList">;
+type Props = NativeStackScreenProps<RootStackParamList, 'ChannelList'>;
 
-const ChannelList = ({route, navigation}: Props) => {
-  const [searchText, setSearchText] = useState("");
+const ChannelList = ({ route, navigation }: Props) => {
+  const [searchText, setSearchText] = useState('');
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (Platform.OS === "android" && isFocused) {
+    if (Platform.OS === 'android' && isFocused) {
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
       ).catch((error) => console.log(error));
@@ -32,24 +31,18 @@ const ChannelList = ({route, navigation}: Props) => {
   }, [isFocused]);
 
   type ItemProps = {
-    name: string,
-    url: string,
+    name: string;
+    url: string;
     tvg: {
-      logo: string
-    },
-  }
+      logo: string;
+    };
+  };
 
-  const renderItem = ({
-      name,
-      url,
-      tvg: { logo },
-  }: ItemProps) => (
+  const renderItem = ({ name, url, tvg: { logo } }: ItemProps) => (
     <ChannelListItem
       channelIconUrl={logo}
       channelName={name}
-      onPress={() =>
-        navigation.navigate("VideoPlayer", { uri: url })
-      }
+      onPress={() => navigation.navigate('VideoPlayer', { uri: url })}
     />
   );
 
@@ -59,7 +52,10 @@ const ChannelList = ({route, navigation}: Props) => {
         ...Styles.globalStyles.primaryContainer,
       }}
     >
-      <SearchBar searchText={searchText} setSearchText={setSearchText} />
+      <SearchBar
+        searchText={searchText}
+        setSearchText={setSearchText}
+      />
       <View style={styles.itemListContainer}>
         <FlatList
           data={route.params.channelList?.filter((playlistItem) =>
@@ -67,13 +63,13 @@ const ChannelList = ({route, navigation}: Props) => {
               .toUpperCase()
               .includes(searchText.trim().toUpperCase())
           )}
-          renderItem={({item}) => renderItem(item)}
+          renderItem={({ item }) => renderItem(item)}
           keyExtractor={(item) => item.name + item.url}
         />
       </View>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   itemListContainer: {

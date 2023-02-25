@@ -1,5 +1,7 @@
-import * as React from "react";
-import { useEffect, useRef } from "react";
+/** @format */
+
+import * as React from 'react';
+import { useEffect, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -7,20 +9,20 @@ import {
   Alert,
   Platform,
   StatusBar,
-} from "react-native";
-import { Video, VideoFullscreenUpdate, ResizeMode } from "expo-av";
-import * as ScreenOrientation from "expo-screen-orientation";
-import { Styles } from "../styles/Styles";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types";
+} from 'react-native';
+import { Video, VideoFullscreenUpdate, ResizeMode } from 'expo-av';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import { Styles } from '../styles/Styles';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types';
 
-type Props = NativeStackScreenProps<RootStackParamList, "VideoPlayer">;
+type Props = NativeStackScreenProps<RootStackParamList, 'VideoPlayer'>;
 
-const VideoPlayer = ({route, navigation}: Props) => {
+const VideoPlayer = ({ route, navigation }: Props) => {
   const video = useRef<Video>(null);
 
   useEffect(() => {
-    if (Platform.OS === "android") {
+    if (Platform.OS === 'android') {
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
       ).catch((error) => console.log(error));
@@ -28,8 +30,8 @@ const VideoPlayer = ({route, navigation}: Props) => {
   }, []);
 
   const replaceFileTypeTsWithM3u8 = (originalUrl: string) =>
-    originalUrl?.slice(originalUrl.length - 2) === "ts"
-      ? originalUrl?.substring(0, originalUrl?.length - 2) + "m3u8"
+    originalUrl?.slice(originalUrl.length - 2) === 'ts'
+      ? originalUrl?.substring(0, originalUrl?.length - 2) + 'm3u8'
       : originalUrl;
 
   return (
@@ -39,7 +41,10 @@ const VideoPlayer = ({route, navigation}: Props) => {
       }}
     >
       <StatusBar hidden />
-      <ActivityIndicator size="large" style={Styles.globalStyles.activityIndicator} />
+      <ActivityIndicator
+        size="large"
+        style={Styles.globalStyles.activityIndicator}
+      />
       <Video
         source={{
           uri: replaceFileTypeTsWithM3u8(route.params.uri),
@@ -51,15 +56,17 @@ const VideoPlayer = ({route, navigation}: Props) => {
         shouldPlay
         useNativeControls
         onLoad={() =>
-          Platform.OS === "ios" && video.current ? video.current.presentFullscreenPlayer() : () => {}
+          Platform.OS === 'ios' && video.current
+            ? video.current.presentFullscreenPlayer()
+            : () => {}
         }
         onError={(error) => {
           console.log(error);
-          Alert.alert("Error", "Channel currently not available!!!");
+          Alert.alert('Error', 'Channel currently not available!!!');
           navigation.goBack();
         }}
         onFullscreenUpdate={(event) =>
-          Platform.OS === "ios" &&
+          Platform.OS === 'ios' &&
           event.fullscreenUpdate === VideoFullscreenUpdate.PLAYER_WILL_DISMISS
             ? navigation.goBack()
             : () => {}
@@ -69,7 +76,7 @@ const VideoPlayer = ({route, navigation}: Props) => {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   video: {

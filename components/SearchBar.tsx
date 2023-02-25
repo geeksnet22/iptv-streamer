@@ -1,10 +1,12 @@
-import * as React from "react";
-import { TextInput, StyleSheet } from "react-native";
+/** @format */
+
+import * as React from 'react';
+import { TextInput, StyleSheet } from 'react-native';
 
 type Props = {
-  searchText: string,
-  setSearchText: React.Dispatch<React.SetStateAction<string>>
-}
+  searchText: string;
+  setSearchText: React.Dispatch<React.SetStateAction<string>>;
+};
 
 function SearchBar({ searchText, setSearchText }: Props) {
   return (
@@ -23,7 +25,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     padding: 5,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     margin: 5,
     marginBottom: 0,
     height: 40,

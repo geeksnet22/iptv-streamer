@@ -1,27 +1,32 @@
-import React from "react";
-import { Text, Image, StyleSheet, Alert, TouchableOpacity } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/core";
-import { Styles } from "../styles/Styles";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types";
+/** @format */
 
-const REMOVE_LOGO_LOCATION = "../assets/icons8-remove-48.png";
+import React from 'react';
+import { Text, Image, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/core';
+import { Styles } from '../styles/Styles';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types';
+
+const REMOVE_LOGO_LOCATION = '../assets/icons8-remove-48.png';
 
 type Props = {
-  playlistName: string,
-  playlistURL: string | null,
-  fetchAndSetExistingPlaylists: () => void,
-  navigation: NativeStackNavigationProp<RootStackParamList, "ExistingPlaylists", undefined>
-}
+  playlistName: string;
+  playlistURL: string | null;
+  fetchAndSetExistingPlaylists: () => void;
+  navigation: NativeStackNavigationProp<
+    RootStackParamList,
+    'ExistingPlaylists',
+    undefined
+  >;
+};
 
 const ExistingPlaylistItem = ({
   playlistName,
   playlistURL,
   fetchAndSetExistingPlaylists,
-  navigation
+  navigation,
 }: Props) => {
-
   const removePlaylist = async () => {
     try {
       await AsyncStorage.removeItem(playlistName).then((response) =>
@@ -29,7 +34,7 @@ const ExistingPlaylistItem = ({
       );
     } catch (e) {
       console.log(e);
-      Alert.alert("Error", "Not able to remove, please try again!!!");
+      Alert.alert('Error', 'Not able to remove, please try again!!!');
     }
   };
 
@@ -37,7 +42,7 @@ const ExistingPlaylistItem = ({
     <TouchableOpacity
       style={{ ...styles.container, ...Styles.globalStyles.secondaryContainer }}
       onPress={() =>
-        navigation.navigate("GroupList", {
+        navigation.navigate('GroupList', {
           playlistName: playlistName,
           playlistURL: playlistURL,
         })
@@ -47,14 +52,14 @@ const ExistingPlaylistItem = ({
       <TouchableOpacity
         onPress={() => {
           Alert.alert(
-            "Remove playlist?",
-            "Are you sure you want to remove this playlist?",
+            'Remove playlist?',
+            'Are you sure you want to remove this playlist?',
             [
               {
-                text: "Yes",
+                text: 'Yes',
                 onPress: removePlaylist,
               },
-              { text: "No" },
+              { text: 'No' },
             ]
           );
         }}
@@ -66,23 +71,23 @@ const ExistingPlaylistItem = ({
       </TouchableOpacity>
     </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     padding: 10,
     minHeight: 75,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     borderBottomLeftRadius: 10,
-    borderBottomColor: "white",
+    borderBottomColor: 'white',
     borderWidth: 1,
   },
   deleteLogo: {
     height: 20,
     width: 20,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
 });
 

@@ -1,6 +1,8 @@
-import * as React from "react";
-import { Text, TouchableOpacity, Image, StyleSheet } from "react-native";
-import { Styles } from "../styles/Styles";
+/** @format */
+
+import * as React from 'react';
+import { Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Styles } from '../styles/Styles';
 
 type Props = {
   groupName: string;
@@ -14,20 +16,25 @@ const GroupListItem = ({ groupName, groupIconUrl, onPress }: Props) => {
       style={{ ...styles.container, ...Styles.globalStyles.secondaryContainer }}
       onPress={onPress}
     >
-      {groupIconUrl && (
-        <Image style={styles.icon} source={{ uri: groupIconUrl }} />
+      {groupIconUrl ? (
+        <Image
+          style={styles.icon}
+          source={{ uri: groupIconUrl }}
+        />
+      ) : (
+        <></>
       )}
       <Text style={Styles.globalStyles.headerText}>{groupName}</Text>
     </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 10,
-    borderBottomColor: "white",
+    borderBottomColor: 'white',
     borderWidth: 1,
     minHeight: 75,
     borderBottomLeftRadius: 10,
@@ -36,7 +43,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginRight: 10,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   name: {
     fontSize: 15,

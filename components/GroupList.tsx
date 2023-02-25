@@ -1,20 +1,22 @@
-import { useState, useEffect } from "react";
-import { SafeAreaView, StyleSheet, View, Alert, FlatList } from "react-native";
-import SearchBar from "./SearchBar";
-import GroupListItem from "./GroupListItem";
-import axios from "axios";
-import { parse, Playlist, PlaylistItem } from "iptv-playlist-parser";
-import { ActivityIndicator } from "react-native";
-import { Styles } from "../styles/Styles";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types";
-import * as React from "react";
+/** @format */
 
-type Props = NativeStackScreenProps<RootStackParamList, "GroupList">;
+import { useState, useEffect } from 'react';
+import { SafeAreaView, StyleSheet, View, Alert, FlatList } from 'react-native';
+import SearchBar from './SearchBar';
+import GroupListItem from './GroupListItem';
+import axios from 'axios';
+import { parse, Playlist, PlaylistItem } from 'iptv-playlist-parser';
+import { ActivityIndicator } from 'react-native';
+import { Styles } from '../styles/Styles';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types';
+import * as React from 'react';
 
-const GroupList = ({navigation, route}: Props) => {
+type Props = NativeStackScreenProps<RootStackParamList, 'GroupList'>;
+
+const GroupList = ({ navigation, route }: Props) => {
   const [parsedData, setParsedData] = useState<Playlist | null>(null);
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -24,29 +26,29 @@ const GroupList = ({navigation, route}: Props) => {
   const fetchAndSetPlaylistsData = async () => {
     if (route.params.playlistURL) {
       axios
-      .get(route.params.playlistURL)
-      .then((response) => {
-        setParsedData(parse(response.data));
-        setIsLoading(false);
-      })
-      .catch((e) => {
-        console.log(e);
-        setIsLoading(false);
-        Alert.alert("Error", "Error loading playlist. Please try again!!!");
-      });
+        .get(route.params.playlistURL)
+        .then((response) => {
+          setParsedData(parse(response.data));
+          setIsLoading(false);
+        })
+        .catch((e) => {
+          console.log(e);
+          setIsLoading(false);
+          Alert.alert('Error', 'Error loading playlist. Please try again!!!');
+        });
     }
   };
-
 
   const renderGroupItem = (playlistItem: PlaylistItem) => {
     return (
       <GroupListItem
         groupName={playlistItem.group.title}
         onPress={() =>
-          navigation.navigate("ChannelList", {
+          navigation.navigate('ChannelList', {
             groupTitle: playlistItem.group.title,
             channelList: parsedData?.items.filter(
-              (playistItem) => playistItem.group.title === playistItem.group.title
+              (playistItem) =>
+                playistItem.group.title === playistItem.group.title
             ),
           })
         }
@@ -60,7 +62,10 @@ const GroupList = ({navigation, route}: Props) => {
         ...Styles.globalStyles.primaryContainer,
       }}
     >
-      <SearchBar searchText={searchText} setSearchText={setSearchText} />
+      <SearchBar
+        searchText={searchText}
+        setSearchText={setSearchText}
+      />
       <View style={styles.itemListContainer}>
         <FlatList
           data={[
@@ -75,7 +80,7 @@ const GroupList = ({navigation, route}: Props) => {
               .toUpperCase()
               .includes(searchText.trim().toUpperCase())
           )}
-          renderItem={({item}) => renderGroupItem(item)}
+          renderItem={({ item }) => renderGroupItem(item)}
           keyExtractor={(item: PlaylistItem) => item.group.title}
         />
       </View>
@@ -89,7 +94,7 @@ const GroupList = ({navigation, route}: Props) => {
       )}
     </SafeAreaView>
   );
-}
+};
 const styles = StyleSheet.create({
   itemListContainer: {
     margin: 5,
