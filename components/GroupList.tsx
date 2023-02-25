@@ -5,10 +5,10 @@ import GroupListItem from "./GroupListItem";
 import axios from "axios";
 import { parse, Playlist, PlaylistItem } from "iptv-playlist-parser";
 import { ActivityIndicator } from "react-native";
-import React = require("react");
 import { Styles } from "../styles/Styles";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
+import * as React from "react";
 
 type Props = NativeStackScreenProps<RootStackParamList, "GroupList">;
 
@@ -70,13 +70,13 @@ const GroupList = ({navigation, route}: Props) => {
                 playistItem,
               ])
             ).values(),
-          ].filter((playistItem) =>
+          ].filter((playistItem: PlaylistItem) =>
             playistItem.group.title
               .toUpperCase()
               .includes(searchText.trim().toUpperCase())
           )}
-          renderItem={({item}) => renderGroupItem(item)}
-          keyExtractor={(item) => item.group.title}
+          renderItem={({item}: PlaylistItem) => renderGroupItem(item)}
+          keyExtractor={(item: PlaylistItem) => item.group.title}
         />
       </View>
       {isLoading ? (

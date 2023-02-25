@@ -1,4 +1,4 @@
-import React = require("react");
+import * as React from "react";
 import { Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Styles } from "../styles/Styles";
 
@@ -13,9 +13,9 @@ const ChannelListItem = ({ channelName, channelIconUrl, onPress }: Props) =>
       style={{ ...styles.container, ...Styles.globalStyles.secondaryContainer }}
       onPress={onPress}
     >
-      {channelIconUrl && (
-        <Image style={styles.icon} source={{ uri: channelIconUrl }} />
-      )}
+      {channelIconUrl 
+      ? <Image style={styles.icon} source={{ uri: channelIconUrl }} /> 
+      : <></>}
       <Text style={Styles.globalStyles.headerText}>{channelName}</Text>
     </TouchableOpacity>;
 

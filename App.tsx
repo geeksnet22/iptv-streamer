@@ -1,4 +1,5 @@
 import * as React from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import VideoPlayer from "./components/VideoPlayer";
@@ -13,7 +14,8 @@ const App = () => {
   const RootStack = createStackNavigator<RootStackParamList>();
 
   return (
-    <NavigationContainer>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <NavigationContainer>
       <RootStack.Navigator>
         <RootStack.Screen
           name="ExistingPlaylists"
@@ -42,6 +44,7 @@ const App = () => {
         />
       </RootStack.Navigator>
     </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
 

@@ -22,7 +22,7 @@ import {
 import { app } from "../config";
 import { Styles } from "../styles/Styles";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React = require("react");
+import * as React from "react";
 import { RootStackParamList } from "../types";
 
 const db = initializeFirestore(app, { experimentalForceLongPolling: true });

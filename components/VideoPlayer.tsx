@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useEffect, useRef } from "react";
 import {
   View,
@@ -12,7 +13,6 @@ import * as ScreenOrientation from "expo-screen-orientation";
 import { Styles } from "../styles/Styles";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
-import * as React from "react";
 
 type Props = NativeStackScreenProps<RootStackParamList, "VideoPlayer">;
 
@@ -62,7 +62,7 @@ const VideoPlayer = ({route, navigation}: Props) => {
           Platform.OS === "ios" &&
           event.fullscreenUpdate === VideoFullscreenUpdate.PLAYER_WILL_DISMISS
             ? navigation.goBack()
-            : {}
+            : () => {}
         }
         style={styles.video}
         collapsable={true}
