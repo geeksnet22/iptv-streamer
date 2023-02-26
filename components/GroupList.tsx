@@ -5,7 +5,7 @@ import { SafeAreaView, StyleSheet, View, Alert, FlatList } from 'react-native';
 import SearchBar from './SearchBar';
 import GroupListItem from './GroupListItem';
 import axios from 'axios';
-import { parse, Playlist, PlaylistItem } from 'iptv-playlist-parser';
+import { parse, Playlist } from 'iptv-playlist-parser';
 import { ActivityIndicator } from 'react-native';
 import { Styles } from '../styles/Styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -13,6 +13,8 @@ import { RootStackParamList } from '../types';
 import * as React from 'react';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'GroupList'>;
+
+const All_CHANNELS_GROUP_NAME = 'All channels';
 
 const GroupList = ({ navigation, route }: Props) => {
   const [parsedData, setParsedData] = useState<Playlist | null>(null);
@@ -39,16 +41,17 @@ const GroupList = ({ navigation, route }: Props) => {
     }
   };
 
-  const renderGroupItem = (playlistItem: PlaylistItem) => {
+  const renderGroupItem = (groupTitle: string) => {
     return (
       <GroupListItem
-        groupName={playlistItem.group.title}
+        groupName={groupTitle}
         onPress={() =>
           navigation.navigate('ChannelList', {
-            groupTitle: playlistItem.group.title,
-            channelList: parsedData?.items.filter(
-              (playistItem) =>
-                playistItem.group.title === playistItem.group.title
+            groupTitle: groupTitle,
+            channelList: parsedData?.items.filter((playlistItem) =>
+              groupTitle === All_CHANNELS_GROUP_NAME
+                ? true
+                : playlistItem.group.title === groupTitle
             ),
           })
         }
@@ -69,19 +72,18 @@ const GroupList = ({ navigation, route }: Props) => {
       <View style={styles.itemListContainer}>
         <FlatList
           data={[
-            ...new Map(
-              parsedData?.items.map((playistItem) => [
-                playistItem.group.title,
-                playistItem,
-              ])
-            ).values(),
-          ].filter((playistItem: PlaylistItem) =>
-            playistItem.group.title
-              .toUpperCase()
-              .includes(searchText.trim().toUpperCase())
+            ...new Set(
+              parsedData?.items.map((playistItem) =>
+                playistItem.group.title !== ''
+                  ? playistItem.group.title
+                  : All_CHANNELS_GROUP_NAME
+              )
+            ),
+          ].filter((groupTitle) =>
+            groupTitle.toUpperCase().includes(searchText.toUpperCase())
           )}
           renderItem={({ item }) => renderGroupItem(item)}
-          keyExtractor={(item: PlaylistItem) => item.group.title}
+          keyExtractor={(groupTitle: string) => groupTitle}
         />
       </View>
       {isLoading ? (
