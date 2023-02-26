@@ -48,11 +48,12 @@ const GroupList = ({ navigation, route }: Props) => {
         onPress={() =>
           navigation.navigate('ChannelList', {
             groupTitle: groupTitle,
-            channelList: parsedData?.items.filter((playlistItem) =>
+            channelList:
               groupTitle === All_CHANNELS_GROUP_NAME
-                ? true
-                : playlistItem.group.title === groupTitle
-            ),
+                ? parsedData?.items
+                : parsedData?.items.filter(
+                    (playlistItem) => playlistItem.group.title === groupTitle
+                  ),
           })
         }
       />
