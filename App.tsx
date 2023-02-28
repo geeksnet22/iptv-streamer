@@ -21,7 +21,7 @@ const App = () => {
           <RootStack.Screen
             name="ExistingPlaylists"
             component={ExistingPlaylists}
-            options={{ title: 'Existing Playlists' }}
+            options={{ title: 'Playlists' }}
           />
           <RootStack.Screen
             name="AddPlaylist"

@@ -11,10 +11,11 @@ import { Styles } from '../styles/Styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import * as React from 'react';
+import { async } from '@firebase/util';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'GroupList'>;
 
-const All_CHANNELS_GROUP_NAME = 'All channels';
+const All_CHANNELS_GROUP_NAME = 'All Channels';
 
 const GroupList = ({ navigation, route }: Props) => {
   const [parsedData, setParsedData] = useState<Playlist | null>(null);
@@ -60,6 +61,17 @@ const GroupList = ({ navigation, route }: Props) => {
     );
   };
 
+  const getListOfUniqueGroups = (): string[] => {
+    const uniqueGroups: string[] = [
+      ...new Set(
+        parsedData?.items
+          .filter((playlistItem) => playlistItem.group.title !== '')
+          .map((playistItem) => playistItem.group.title)
+      ),
+    ];
+    return uniqueGroups;
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -72,17 +84,14 @@ const GroupList = ({ navigation, route }: Props) => {
       />
       <View style={styles.itemListContainer}>
         <FlatList
-          data={[
-            ...new Set(
-              parsedData?.items.map((playistItem) =>
-                playistItem.group.title !== ''
-                  ? playistItem.group.title
-                  : All_CHANNELS_GROUP_NAME
-              )
-            ),
-          ].filter((groupTitle) =>
-            groupTitle.toUpperCase().includes(searchText.toUpperCase())
-          )}
+          data={
+            parsedData !== null
+              ? [All_CHANNELS_GROUP_NAME, ...getListOfUniqueGroups()].filter(
+                  (groupTitle) =>
+                    groupTitle.toUpperCase().includes(searchText.toUpperCase())
+                )
+              : []
+          }
           renderItem={({ item }) => renderGroupItem(item)}
           keyExtractor={(groupTitle: string) => groupTitle}
         />
