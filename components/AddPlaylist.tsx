@@ -13,21 +13,11 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 import LabelAndTextInputField from './LabelAndTextInputField';
-import {
-  collection,
-  addDoc,
-  initializeFirestore,
-  serverTimestamp,
-} from 'firebase/firestore';
-import { app } from '../config';
 import { Styles } from '../styles/Styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { RootStackParamList } from '../types';
-
-const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddPlaylist'>;
 
@@ -40,19 +30,7 @@ function AddPlaylist({ route, navigation }: Props) {
       return;
     }
     setShowActivityIndicator(true);
-    axios
-      .get(playlistURL.trim())
-      .then((response) => {
-        storePlaylist();
-      })
-      .catch((e) => {
-        console.log(e);
-        setShowActivityIndicator(false);
-        Alert.alert(
-          'Error',
-          'Not a valid playlist, please try a different URL!!!'
-        );
-      });
+    storePlaylistAndMoveToExistingPlaylistsIfSuccessful();
   };
 
   const isValidInputData = () => {
@@ -75,35 +53,23 @@ function AddPlaylist({ route, navigation }: Props) {
     return isValidInputData;
   };
 
-  const storePlaylist = async () => {
+  const storePlaylistAndMoveToExistingPlaylistsIfSuccessful = async () => {
     try {
-      await AsyncStorage.setItem(playlistName, playlistURL).then((value) => {
-        setShowActivityIndicator(false);
-        navigation.navigate('ExistingPlaylists');
-        Platform.OS === 'android'
-          ? ToastAndroid.show(
-              'Playlist successfully added!!!',
-              ToastAndroid.SHORT
-            )
-          : {};
-        // addPlayistToDb();
-      });
+      await AsyncStorage.setItem(playlistName.trim(), playlistURL.trim()).then(
+        (value) => {
+          setShowActivityIndicator(false);
+          navigation.navigate('ExistingPlaylists');
+          Platform.OS === 'android'
+            ? ToastAndroid.show(
+                'Playlist successfully added!!!',
+                ToastAndroid.SHORT
+              )
+            : {};
+        }
+      );
     } catch (e) {
       console.log(e);
       Alert.alert('Error', 'Error saving the playlist. Please try again.');
-    }
-  };
-
-  const addPlayistToDb = async () => {
-    try {
-      const docRef = await addDoc(collection(db, 'playlists'), {
-        name: playlistName,
-        url: playlistURL.trim(),
-        createdAt: serverTimestamp(),
-      });
-      console.log('Playlist successfully added with ID: ', docRef.id);
-    } catch (error) {
-      console.error('Error uploading playlist: ', error);
     }
   };
 
