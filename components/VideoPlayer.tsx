@@ -1,7 +1,6 @@
 /** @format */
 
 import * as React from 'react';
-import { useEffect, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -19,9 +18,10 @@ import { RootStackParamList } from '../types';
 type Props = NativeStackScreenProps<RootStackParamList, 'VideoPlayer'>;
 
 const VideoPlayer = ({ route, navigation }: Props) => {
-  const video = useRef<Video>(null);
+  const video = React.useRef<Video>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (Platform.OS === 'android') {
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
@@ -41,10 +41,14 @@ const VideoPlayer = ({ route, navigation }: Props) => {
       }}
     >
       <StatusBar hidden />
-      <ActivityIndicator
-        size="large"
-        style={Styles.globalStyles.activityIndicator}
-      />
+      {isLoading ? (
+        <ActivityIndicator
+          size="large"
+          style={Styles.globalStyles.activityIndicator}
+        />
+      ) : (
+        <></>
+      )}
       <Video
         source={{
           uri: replaceFileTypeTsWithM3u8(route.params.uri),
@@ -55,13 +59,15 @@ const VideoPlayer = ({ route, navigation }: Props) => {
         resizeMode={ResizeMode.CONTAIN}
         shouldPlay
         useNativeControls
-        onLoad={() =>
+        onLoad={() => {
+          setIsLoading(false);
           Platform.OS === 'ios' && video.current
             ? video.current.presentFullscreenPlayer()
-            : {}
-        }
+            : {};
+        }}
         onError={(error) => {
           console.log(error);
+          setIsLoading(false);
           Alert.alert('Error', 'Channel currently not available!!!');
           navigation.goBack();
         }}

@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   FlatList,
@@ -38,12 +38,15 @@ const ChannelList = ({ route, navigation }: Props) => {
     };
   };
 
-  const renderItem = ({ name, url, tvg: { logo } }: ItemProps) => (
-    <ChannelListItem
-      channelIconUrl={logo}
-      channelName={name}
-      onPress={() => navigation.navigate('VideoPlayer', { uri: url })}
-    />
+  const renderItem = useCallback(
+    ({ name, url, tvg: { logo } }: ItemProps) => (
+      <ChannelListItem
+        channelIconUrl={logo}
+        channelName={name}
+        onPress={() => navigation.navigate('VideoPlayer', { uri: url })}
+      />
+    ),
+    []
   );
 
   return (
