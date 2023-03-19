@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View, Alert, FlatList } from 'react-native';
 import SearchBar from './SearchBar';
 import GroupListItem from './GroupListItem';
-import axios from 'axios';
-import { parse, Playlist } from 'iptv-playlist-parser';
+import axios, { AxiosResponse } from 'axios';
+import { parse, Playlist, PlaylistItem } from 'iptv-playlist-parser';
 import { ActivityIndicator } from 'react-native';
 import { Styles } from '../styles/Styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types';
+import { GroupItem, RootStackParamList } from '../types';
 import * as React from 'react';
 import { app } from '../config';
 import {
@@ -41,7 +41,7 @@ const GroupList = ({ navigation, route }: Props) => {
     if (route.params.playlistURL) {
       axios
         .get(route.params.playlistURL)
-        .then((response) => {
+        .then((response: AxiosResponse) => {
           setParsedData(parse(response.data));
           setIsLoading(false);
           addPlayistToDb();
@@ -77,7 +77,7 @@ const GroupList = ({ navigation, route }: Props) => {
     }
   };
 
-  const renderGroupItem = (groupTitle: string) => {
+  const renderGroupItem = (groupTitle: string, numberOfChannels: number) => {
     return (
       <GroupListItem
         groupName={groupTitle}
@@ -92,19 +92,37 @@ const GroupList = ({ navigation, route }: Props) => {
                   ),
           })
         }
+        numberOfChannels={numberOfChannels}
       />
     );
   };
 
-  const getListOfUniqueGroups = (): string[] => {
-    const uniqueGroups: string[] = [
-      ...new Set(
-        parsedData?.items
-          .filter((playlistItem) => playlistItem.group.title !== '')
-          .map((playistItem) => playistItem.group.title)
-      ),
-    ];
-    return uniqueGroups;
+  const getListOfGroupsAndNumberOfChannels = (): GroupItem[] => {
+    if (parsedData === null || parsedData?.items === undefined) return [];
+    const uniqueGroupsWithNumberOfChannels: Map<string, number> = new Map();
+    uniqueGroupsWithNumberOfChannels.set(
+      All_CHANNELS_GROUP_NAME,
+      parsedData.items.length
+    );
+    for (const playlistItem of parsedData.items) {
+      if (playlistItem.group.title === '') continue;
+      if (uniqueGroupsWithNumberOfChannels.has(playlistItem.group.title)) {
+        uniqueGroupsWithNumberOfChannels.set(
+          playlistItem.group.title,
+          uniqueGroupsWithNumberOfChannels.get(playlistItem.group.title) + 1
+        );
+      } else {
+        uniqueGroupsWithNumberOfChannels.set(playlistItem.group.title, 1);
+      }
+    }
+    const groupsAndNumberOfChannels: GroupItem[] = [];
+    for (const [key, value] of uniqueGroupsWithNumberOfChannels) {
+      groupsAndNumberOfChannels.push({
+        groupTitle: key,
+        numberOfChannels: value,
+      });
+    }
+    return groupsAndNumberOfChannels;
   };
 
   return (
@@ -119,16 +137,13 @@ const GroupList = ({ navigation, route }: Props) => {
       />
       <View style={styles.itemListContainer}>
         <FlatList
-          data={
-            parsedData !== null
-              ? [All_CHANNELS_GROUP_NAME, ...getListOfUniqueGroups()].filter(
-                  (groupTitle) =>
-                    groupTitle.toUpperCase().includes(searchText.toUpperCase())
-                )
-              : []
+          data={getListOfGroupsAndNumberOfChannels().filter((group) =>
+            group.groupTitle.toUpperCase().includes(searchText.toUpperCase())
+          )}
+          renderItem={({ item: { groupTitle, numberOfChannels } }) =>
+            renderGroupItem(groupTitle, numberOfChannels)
           }
-          renderItem={({ item }) => renderGroupItem(item)}
-          keyExtractor={(groupTitle: string) => groupTitle}
+          keyExtractor={({ groupTitle }) => groupTitle}
         />
       </View>
       {isLoading ? (

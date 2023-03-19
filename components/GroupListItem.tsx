@@ -7,10 +7,16 @@ import { Styles } from '../styles/Styles';
 type Props = {
   groupName: string;
   groupIconUrl?: string;
+  numberOfChannels: number;
   onPress: () => void;
 };
 
-const GroupListItem = ({ groupName, groupIconUrl, onPress }: Props) => {
+const GroupListItem = ({
+  groupName,
+  groupIconUrl,
+  numberOfChannels,
+  onPress,
+}: Props) => {
   return (
     <TouchableOpacity
       style={{ ...styles.container, ...Styles.globalStyles.secondaryContainer }}
@@ -25,6 +31,7 @@ const GroupListItem = ({ groupName, groupIconUrl, onPress }: Props) => {
         <></>
       )}
       <Text style={Styles.globalStyles.headerText}>{groupName}</Text>
+      <Text style={Styles.globalStyles.headerText}>{numberOfChannels}</Text>
     </TouchableOpacity>
   );
 };
@@ -38,6 +45,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     minHeight: 75,
     borderBottomLeftRadius: 10,
+    justifyContent: 'space-between',
   },
   icon: {
     width: 30,

@@ -19,3 +19,8 @@ export type RootStackParamList = {
     uri: string;
   };
 };
+
+export interface GroupItem {
+  groupTitle: string;
+  numberOfChannels: number;
+}
