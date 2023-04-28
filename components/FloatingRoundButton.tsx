@@ -1,8 +1,8 @@
 /** @format */
 
-import React from 'react';
+import * as React from 'react';
 import { Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { Styles } from '../styles/Styles';
+import { Styles } from '../styles/styles';
 
 type Props = {
   style: React.CSSProperties;

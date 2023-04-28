@@ -1,12 +1,12 @@
 /** @format */
 
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ExistingPlaylistItem from './ExistingPlaylistItem';
 import { useIsFocused } from '@react-navigation/native';
 import FloatingRoundButton from './FloatingRoundButton';
-import { Styles } from '../styles/Styles';
+import { Styles } from '../styles/styles';
 import { KeyValuePair } from '@react-native-async-storage/async-storage/lib/typescript/types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
@@ -16,12 +16,12 @@ const ADD_LOGO_ADDRESS = '../assets/add-gb2bab072c_640.png';
 type Props = NativeStackScreenProps<RootStackParamList, 'ExistingPlaylists'>;
 
 const ExistingPlaylists = ({ navigation }: Props) => {
-  const [playlists, setPlaylists] = useState<readonly KeyValuePair[]>(
+  const [playlists, setPlaylists] = React.useState<readonly KeyValuePair[]>(
     [] as readonly KeyValuePair[]
   );
   const isFocused = useIsFocused();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isFocused) {
       fetchAndSetExistingPlaylists();
     }

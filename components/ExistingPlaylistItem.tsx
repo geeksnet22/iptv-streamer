@@ -1,9 +1,9 @@
 /** @format */
 
-import React from 'react';
+import * as React from 'react';
 import { Text, Image, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Styles } from '../styles/Styles';
+import { Styles } from '../styles/styles';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 
@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   deleteLogo: {
-    height: 20,
-    width: 20,
+    height: 25,
+    width: 25,
     resizeMode: 'contain',
   },
 });

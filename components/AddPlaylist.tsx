@@ -1,6 +1,6 @@
 /** @format */
 
-import { useState } from 'react';
+import * as React from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,17 +14,17 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LabelAndTextInputField from './LabelAndTextInputField';
-import { Styles } from '../styles/Styles';
+import { Styles } from '../styles/styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import * as React from 'react';
 import { RootStackParamList } from '../types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddPlaylist'>;
 
 function AddPlaylist({ route, navigation }: Props) {
-  const [playlistName, setPlaylistName] = useState('');
-  const [playlistURL, setplaylistURL] = useState('');
-  const [showActivityIndicator, setShowActivityIndicator] = useState(false);
+  const [playlistName, setPlaylistName] = React.useState('');
+  const [playlistURL, setplaylistURL] = React.useState('');
+  const [showActivityIndicator, setShowActivityIndicator] =
+    React.useState(false);
   const addPlayist = () => {
     if (!isValidInputData()) {
       return;
@@ -58,7 +58,7 @@ function AddPlaylist({ route, navigation }: Props) {
       await AsyncStorage.setItem(playlistName.trim(), playlistURL.trim()).then(
         (value) => {
           setShowActivityIndicator(false);
-          navigation.navigate('ExistingPlaylists');
+          navigation.navigate('DrawerHome');
           Platform.OS === 'android'
             ? ToastAndroid.show(
                 'Playlist successfully added!!!',

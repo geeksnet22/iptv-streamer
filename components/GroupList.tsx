@@ -1,16 +1,15 @@
 /** @format */
 
-import { useState, useEffect } from 'react';
+import * as React from 'react';
 import { SafeAreaView, StyleSheet, View, Alert, FlatList } from 'react-native';
 import SearchBar from './SearchBar';
 import GroupListItem from './GroupListItem';
 import axios, { AxiosResponse } from 'axios';
-import { parse, Playlist, PlaylistItem } from 'iptv-playlist-parser';
+import { parse, Playlist } from 'iptv-playlist-parser';
 import { ActivityIndicator } from 'react-native';
-import { Styles } from '../styles/Styles';
+import { Styles } from '../styles/styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GroupItem, RootStackParamList } from '../types';
-import * as React from 'react';
 import { app } from '../config';
 import {
   collection,
@@ -29,11 +28,11 @@ const All_CHANNELS_GROUP_NAME = 'All Channels';
 const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
 const GroupList = ({ navigation, route }: Props) => {
-  const [parsedData, setParsedData] = useState<Playlist | null>(null);
-  const [searchText, setSearchText] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [parsedData, setParsedData] = React.useState<Playlist | null>(null);
+  const [searchText, setSearchText] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(true);
 
-  useEffect(() => {
+  React.useEffect(() => {
     fetchAndSetPlaylistsData();
   }, []);
 

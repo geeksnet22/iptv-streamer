@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { Video, VideoFullscreenUpdate, ResizeMode } from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import { Styles } from '../styles/Styles';
+import { Styles } from '../styles/styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 

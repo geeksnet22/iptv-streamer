@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import * as React from 'react';
 import {
   View,
   FlatList,
@@ -12,17 +12,22 @@ import SearchBar from './SearchBar';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { useIsFocused } from '@react-navigation/native';
 import ChannelListItem from './ChannelListItem';
-import { Styles } from '../styles/Styles';
+import { Styles } from '../styles/styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
+import { PlaylistItem } from 'iptv-playlist-parser';
+import { useAppSelector } from '../hooks';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ChannelList'>;
 
 const ChannelList = ({ route, navigation }: Props) => {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = React.useState('');
   const isFocused = useIsFocused();
+  const favoriteChannels = useAppSelector(
+    (state) => state.favoriteChannels.value
+  );
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (Platform.OS === 'android' && isFocused) {
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
@@ -30,23 +35,17 @@ const ChannelList = ({ route, navigation }: Props) => {
     }
   }, [isFocused]);
 
-  type ItemProps = {
-    name: string;
-    url: string;
-    tvg: {
-      logo: string;
-    };
-  };
-
-  const renderItem = useCallback(
-    ({ name, url, tvg: { logo } }: ItemProps) => (
+  const renderItem = React.useCallback(
+    (playlistItem: PlaylistItem) => (
       <ChannelListItem
-        channelIconUrl={logo}
-        channelName={name}
-        onPress={() => navigation.navigate('VideoPlayer', { uri: url })}
+        playlistItem={playlistItem}
+        favoriteChannels={favoriteChannels}
+        onPress={() =>
+          navigation.navigate('VideoPlayer', { uri: playlistItem.url })
+        }
       />
     ),
-    []
+    [favoriteChannels]
   );
 
   return (

@@ -1,9 +1,14 @@
 /** @format */
 
-import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { TextInputProps } from 'react-native';
-import { Styles } from '../styles/Styles';
+import * as React from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TextInputProps,
+} from 'react-native';
+import { Styles } from '../styles/styles';
 
 type Props = {
   label: string;
