@@ -58,7 +58,7 @@ function AddPlaylist({ route, navigation }: Props) {
       await AsyncStorage.setItem(playlistName.trim(), playlistURL.trim()).then(
         (value) => {
           setShowActivityIndicator(false);
-          navigation.navigate('DrawerHome');
+          navigation.navigate('HomeDrawer');
           Platform.OS === 'android'
             ? ToastAndroid.show(
                 'Playlist successfully added!!!',

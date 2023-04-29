@@ -21,7 +21,7 @@ const getIndexOfPlaylistInFavorites = (
     (p) =>
       p.name === playlistItem.name &&
       p.group.title === playlistItem.group.title &&
-      p.url == playlistItem.url
+      p.tvg.id == playlistItem.tvg.id
   );
 
 const ChannelListItem = ({
