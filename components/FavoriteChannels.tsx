@@ -62,9 +62,7 @@ const FavoriteChannels = ({ navigation }: Props) => {
         <Text
           style={{
             ...Styles.globalStyles.basicText,
-            alignSelf: 'center',
-            fontStyle: 'italic',
-            flexDirection: 'column',
+            ...styles.disclaimerText,
           }}
         >
           No channels added as favorites
@@ -73,5 +71,13 @@ const FavoriteChannels = ({ navigation }: Props) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  disclaimerText: {
+    alignSelf: 'center',
+    fontStyle: 'italic',
+    flexDirection: 'column',
+  },
+});
 
 export default FavoriteChannels;

@@ -3,6 +3,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import { PlaylistItem } from 'iptv-playlist-parser';
+import { persistReducer } from 'redux-persist';
+import { persistConfig } from '../../persistConfig';
 
 interface FavoriteChannelsState {
   value: PlaylistItem[];
@@ -16,12 +18,6 @@ export const favoriteChannelsSlice = createSlice({
   name: 'FavoriteChannels',
   initialState,
   reducers: {
-    set: (state, action: PayloadAction<PlaylistItem[]>) => {
-      state.value = action.payload;
-    },
-    unset: (state) => {
-      state.value = [];
-    },
     add: (state, action: PayloadAction<PlaylistItem>) => {
       state.value = [...new Set(state.value.concat(action.payload))];
     },
@@ -36,4 +32,5 @@ export const favoriteChannelsSlice = createSlice({
 
 export const { add, remove } = favoriteChannelsSlice.actions;
 export const favoriteChannels = (state: RootState) => state.favoriteChannels;
-export default favoriteChannelsSlice.reducer;
+
+export default persistReducer(persistConfig, favoriteChannelsSlice.reducer);

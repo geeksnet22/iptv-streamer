@@ -10,6 +10,7 @@ import { Styles } from '../styles/styles';
 import { KeyValuePair } from '@react-native-async-storage/async-storage/lib/typescript/types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const ADD_LOGO_ADDRESS = '../assets/add-gb2bab072c_640.png';
 
@@ -31,7 +32,9 @@ const ExistingPlaylists = ({ navigation }: Props) => {
     try {
       await AsyncStorage.getAllKeys().then((keys) => {
         AsyncStorage.multiGet(keys).then((playlists) =>
-          setPlaylists(playlists)
+          setPlaylists(
+            playlists.filter((playlist) => !playlist[0]?.startsWith('persist:'))
+          )
         );
       });
     } catch (e) {
@@ -100,7 +103,6 @@ const ExistingPlaylists = ({ navigation }: Props) => {
           keyExtractor={(item) => item.playlistName}
         />
       </View>
-
       <FloatingRoundButton
         style={styles.floatingButton}
         icon={require(ADD_LOGO_ADDRESS)}
