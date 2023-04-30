@@ -3,7 +3,6 @@
 import { PlaylistItem } from 'iptv-playlist-parser';
 
 export type RootStackParamList = {
-  ExistingPlaylists: undefined;
   AddPlaylist: {
     existingPlaylistNames: string[];
   };
@@ -18,6 +17,7 @@ export type RootStackParamList = {
   VideoPlayer: {
     uri: string;
   };
+  ExistingPlaylists: undefined;
   FavoriteChannels: undefined;
   HomeDrawer: undefined;
 };

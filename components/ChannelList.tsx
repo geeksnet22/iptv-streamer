@@ -16,7 +16,8 @@ import { Styles } from '../styles/styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { PlaylistItem } from 'iptv-playlist-parser';
-import { useAppSelector } from '../hooks';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { add } from '../redux/slices/recentChannelsSlice';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ChannelList'>;
 
@@ -26,6 +27,7 @@ const ChannelList = ({ route, navigation }: Props) => {
   const favoriteChannels = useAppSelector(
     (state) => state.favoriteChannels.value
   );
+  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     if (Platform.OS === 'android' && isFocused) {
@@ -40,9 +42,10 @@ const ChannelList = ({ route, navigation }: Props) => {
       <ChannelListItem
         playlistItem={playlistItem}
         favoriteChannels={favoriteChannels}
-        onPress={() =>
-          navigation.navigate('VideoPlayer', { uri: playlistItem.url })
-        }
+        onPress={() => {
+          dispatch(add(playlistItem));
+          navigation.navigate('VideoPlayer', { uri: playlistItem.url });
+        }}
       />
     ),
     [favoriteChannels]
@@ -66,7 +69,9 @@ const ChannelList = ({ route, navigation }: Props) => {
               .includes(searchText.trim().toUpperCase())
           )}
           renderItem={({ item }) => renderItem(item)}
-          keyExtractor={(item) => item.name + item.url}
+          keyExtractor={(item) =>
+            item.name + item.tvg.id + item.group.title + item.url
+          }
         />
       </View>
     </SafeAreaView>

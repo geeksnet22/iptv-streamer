@@ -2,7 +2,7 @@
   "expo": {
     "name": "IptvStreamer",
     "slug": "IptvStreamer",
-    "version": "13.0.0",
+    "version": "15.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "splash": {
@@ -29,7 +29,7 @@
         "android.permission.CAMERA"
       ],
       "package": "com.iptv.streamer",
-      "versionCode": 13
+      "versionCode": 16
     },
     "web": {}
   }

@@ -10,7 +10,8 @@ import { Styles } from '../styles/styles';
 import { KeyValuePair } from '@react-native-async-storage/async-storage/lib/typescript/types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
-import { PersistGate } from 'redux-persist/integration/react';
+import RecentChannels from './RecentChannels';
+import { useAppSelector } from '../hooks';
 
 const ADD_LOGO_ADDRESS = '../assets/add-gb2bab072c_640.png';
 
@@ -21,6 +22,7 @@ const ExistingPlaylists = ({ navigation }: Props) => {
     [] as readonly KeyValuePair[]
   );
   const isFocused = useIsFocused();
+  const recentChannels = useAppSelector((state) => state.recentChannels.value);
 
   React.useEffect(() => {
     if (isFocused) {
@@ -63,46 +65,67 @@ const ExistingPlaylists = ({ navigation }: Props) => {
 
   return (
     <View
-      style={
-        playlists.length === 0
-          ? {
-              ...styles.container,
-              ...Styles.globalStyles.primaryContainer,
-              justifyContent: 'center',
-            }
-          : {
-              ...styles.container,
-              ...Styles.globalStyles.primaryContainer,
-            }
-      }
+      style={{
+        ...styles.container,
+        ...Styles.globalStyles.primaryContainer,
+      }}
     >
+      {recentChannels.length > 0 ? (
+        <View>
+          <Text
+            style={{
+              ...Styles.globalStyles.headerText,
+              ...Styles.globalStyles.secondaryContainer,
+              ...styles.header,
+            }}
+          >
+            Recently Played
+          </Text>
+          <RecentChannels recentChannels={recentChannels} />
+        </View>
+      ) : (
+        <></>
+      )}
       {playlists.length === 0 ? (
         <Text
           style={{
             ...Styles.globalStyles.basicText,
             alignSelf: 'center',
             fontStyle: 'italic',
-            flexDirection: 'column',
+            position: 'absolute',
+            top: '50%',
           }}
         >
           Please add a playlist
         </Text>
-      ) : null}
-      <View style={styles.playlistWrapper}>
-        <FlatList
-          data={playlists.map((playlist) => ({
-            playlistName: playlist[0],
-            playlistUrl: playlist[1],
-          }))}
-          renderItem={({ item }) =>
-            renderItem({
-              playlistName: item.playlistName,
-              playlistUrl: item.playlistUrl,
-            })
-          }
-          keyExtractor={(item) => item.playlistName}
-        />
-      </View>
+      ) : (
+        <>
+          <Text
+            style={{
+              ...Styles.globalStyles.headerText,
+              ...Styles.globalStyles.secondaryContainer,
+              ...styles.header,
+            }}
+          >
+            Local Playlists
+          </Text>
+          <View style={styles.playlistWrapper}>
+            <FlatList
+              data={playlists.map((playlist) => ({
+                playlistName: playlist[0],
+                playlistUrl: playlist[1],
+              }))}
+              renderItem={({ item }) =>
+                renderItem({
+                  playlistName: item.playlistName,
+                  playlistUrl: item.playlistUrl,
+                })
+              }
+              keyExtractor={(item) => item.playlistName}
+            />
+          </View>
+        </>
+      )}
       <FloatingRoundButton
         style={styles.floatingButton}
         icon={require(ADD_LOGO_ADDRESS)}
@@ -120,12 +143,17 @@ const styles = StyleSheet.create({
     margin: 5,
     maxWidth: 600,
     marginBottom: 20,
+    flex: 1,
   },
   floatingButton: {
     position: 'absolute',
     bottom: 0,
     right: 0,
     margin: 30,
+  },
+  header: {
+    marginTop: 10,
+    padding: 5,
   },
 });
 

@@ -56,7 +56,9 @@ const FavoriteChannels = ({ navigation }: Props) => {
         <FlatList
           data={favoriteChannels}
           renderItem={({ item }) => renderItem(item)}
-          keyExtractor={(item) => item.name + item.url}
+          keyExtractor={(item) =>
+            item.name + item.tvg.id + item.group.title + item.url
+          }
         />
       ) : (
         <Text
