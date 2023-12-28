@@ -22,14 +22,6 @@ const GroupListItem = ({
       style={{ ...styles.container, ...Styles.globalStyles.secondaryContainer }}
       onPress={onPress}
     >
-      {groupIconUrl ? (
-        <Image
-          style={styles.icon}
-          source={{ uri: groupIconUrl }}
-        />
-      ) : (
-        <></>
-      )}
       <Text style={Styles.globalStyles.headerText}>{groupName}</Text>
       <Text style={Styles.globalStyles.headerText}>{numberOfChannels}</Text>
     </TouchableOpacity>

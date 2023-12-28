@@ -2,7 +2,7 @@
   "expo": {
     "name": "IptvStreamer",
     "slug": "IptvStreamer",
-    "version": "15.0.0",
+    "version": "19.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "splash": {
@@ -29,8 +29,13 @@
         "android.permission.CAMERA"
       ],
       "package": "com.iptv.streamer",
-      "versionCode": 16
+      "versionCode": 19
     },
-    "web": {}
+    "web": {},
+    "extra": {
+      "eas": {
+        "projectId": "4c4fa2d2-fe4b-47ef-ad97-ae09288b581f"
+      }
+    }
   }
 }

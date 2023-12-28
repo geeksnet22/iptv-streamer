@@ -18,7 +18,13 @@ const RecentChannelsItem = ({ playlistItem, onPress }: Props) => {
     >
       <Image
         style={styles.logo}
-        source={{ uri: playlistItem.tvg.logo }}
+        source={
+          playlistItem.tvg.logo !== ''
+            ? {
+                uri: playlistItem.tvg.logo,
+              }
+            : require('../assets/icons8-tv-50.png')
+        }
       />
       <Text
         numberOfLines={1}

@@ -42,14 +42,16 @@ const ChannelListItem = ({
       <View
         style={{ flexDirection: 'row', alignItems: 'center', maxWidth: '90%' }}
       >
-        {playlistItem.tvg.logo ? (
-          <Image
-            style={styles.icon}
-            source={{ uri: playlistItem.tvg.logo }}
-          />
-        ) : (
-          <></>
-        )}
+        <Image
+          style={styles.icon}
+          source={
+            playlistItem.tvg.logo !== ''
+              ? {
+                  uri: playlistItem.tvg.logo,
+                }
+              : require('../assets/icons8-tv-50.png')
+          }
+        />
         <Text style={Styles.globalStyles.headerText}>{playlistItem.name}</Text>
       </View>
       <TouchableOpacity
