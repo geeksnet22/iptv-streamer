@@ -1,38 +1,25 @@
 /** @format */
 
 import * as React from 'react';
-import {
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  Alert,
-  Platform,
-  StatusBar,
-} from 'react-native';
-import { Video, VideoFullscreenUpdate, ResizeMode } from 'expo-av';
+import { View, StyleSheet, Platform, StatusBar } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { Styles } from '../styles/styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
+import PlayerView from '../modules/PlayerView';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'VideoPlayer'>;
 
-const VideoPlayer = ({ route, navigation }: Props) => {
-  const video = React.useRef<Video>(null);
-  const [isLoading, setIsLoading] = React.useState(true);
-
+const VideoPlayer = ({ route }: Props) => {
   React.useEffect(() => {
     if (Platform.OS === 'android') {
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
       ).catch((error) => console.log(error));
     }
-  }, []);
 
-  const replaceFileTypeTsWithM3u8 = (originalUrl: string): string =>
-    originalUrl?.slice(originalUrl.length - 2) === 'ts'
-      ? originalUrl?.substring(0, originalUrl?.length - 2) + 'm3u8'
-      : originalUrl;
+    return () => PlayerView.stop();
+  }, []);
 
   return (
     <View
@@ -41,52 +28,18 @@ const VideoPlayer = ({ route, navigation }: Props) => {
       }}
     >
       <StatusBar hidden />
-      {isLoading ? (
-        <ActivityIndicator
-          size="large"
-          style={Styles.globalStyles.activityIndicator}
-        />
-      ) : (
-        <></>
-      )}
-      <Video
-        source={{
-          uri: replaceFileTypeTsWithM3u8(route.params.uri),
-        }}
-        ref={video}
-        rate={1.0}
-        volume={1.0}
-        resizeMode={ResizeMode.CONTAIN}
-        shouldPlay
-        useNativeControls
-        onLoad={() => {
-          setIsLoading(false);
-          Platform.OS === 'ios' && video.current
-            ? video.current.presentFullscreenPlayer()
-            : {};
-        }}
-        onError={(error) => {
-          console.log(error);
-          setIsLoading(false);
-          Alert.alert('Error', 'Channel currently not available!!!');
-          navigation.goBack();
-        }}
-        onFullscreenUpdate={(event) =>
-          Platform.OS === 'ios' &&
-          event.fullscreenUpdate === VideoFullscreenUpdate.PLAYER_WILL_DISMISS
-            ? navigation.goBack()
-            : {}
-        }
-        style={styles.video}
-        collapsable={true}
+      <PlayerView.PlayerView
+        style={styles.playerView}
+        url={route.params.uri}
       />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  video: {
-    flex: 1,
+  playerView: {
+    width: '100%',
+    height: '100%',
   },
 });
 

@@ -25,6 +25,8 @@ class PlayerViewManager : SimpleViewManager<PlayerView>() {
         val playerView = PlayerView(reactContext)
         exoPlayer = ExoPlayer.Builder(reactContext).build()
         playerView.player = exoPlayer
+        playerView.useController = false
+        playerView.setShowBuffering(PlayerView.SHOW_BUFFERING_WHEN_PLAYING)
         return playerView
     }
 
