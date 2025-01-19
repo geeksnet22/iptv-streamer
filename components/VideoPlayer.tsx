@@ -1,7 +1,7 @@
 /** @format */
 
 import * as React from 'react';
-import { View, StyleSheet, Platform, StatusBar } from 'react-native';
+import { View, StyleSheet, StatusBar } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { Styles } from '../styles/styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -10,15 +10,45 @@ import PlayerView from '../modules/PlayerView';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'VideoPlayer'>;
 
+const lockOrientation = async () => {
+  try {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.LANDSCAPE
+    );
+  } catch (error) {
+    console.error('Failed to lock orientation:', error);
+  }
+};
+
+const handleOrientationChange = async () => {
+  try {
+    const orientation = await ScreenOrientation.getOrientationAsync();
+    if (orientation === ScreenOrientation.Orientation.LANDSCAPE_LEFT) {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
+      );
+    } else if (orientation === ScreenOrientation.Orientation.LANDSCAPE_RIGHT) {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT
+      );
+    }
+  } catch (error) {
+    console.error('Failed to handle orientation change:', error);
+  }
+};
+
 const VideoPlayer = ({ route }: Props) => {
   React.useEffect(() => {
-    if (Platform.OS === 'android') {
-      ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
-      ).catch((error) => console.log(error));
-    }
+    lockOrientation();
 
-    return () => PlayerView.stop();
+    const subscription = ScreenOrientation.addOrientationChangeListener(
+      handleOrientationChange
+    );
+
+    return () => {
+      PlayerView.stop();
+      ScreenOrientation.removeOrientationChangeListener(subscription);
+    };
   }, []);
 
   return (
