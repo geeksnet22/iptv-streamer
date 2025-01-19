@@ -11,15 +11,6 @@ import { Styles } from '../styles/styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GroupItem, RootStackParamList } from '../types';
 import { app } from '../config';
-import {
-  collection,
-  getDocs,
-  addDoc,
-  initializeFirestore,
-  serverTimestamp,
-  query,
-  where,
-} from 'firebase/firestore';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'GroupList'>;
 
@@ -50,29 +41,6 @@ const GroupList = ({ navigation, route }: Props) => {
           setIsLoading(false);
           Alert.alert('Error', 'Error loading playlist. Please try again!!!');
         });
-    }
-  };
-
-  const addPlayistToDb = async () => {
-    try {
-      const playlistsQuery = query(
-        collection(db, 'playlists'),
-        where('url', '==', route.params.playlistURL)
-      );
-      const playlistsQuerySnapshot = await getDocs(playlistsQuery);
-      if (playlistsQuerySnapshot.empty) {
-        const playlistsDocRef = await addDoc(collection(db, 'playlists'), {
-          name: route.params.playlistName,
-          url: route.params.playlistURL,
-          createdAt: serverTimestamp(),
-        });
-        console.log(
-          'Playlist successfully added with ID: ',
-          playlistsDocRef.id
-        );
-      }
-    } catch (error) {
-      console.error('Error uploading playlist: ', error);
     }
   };
 

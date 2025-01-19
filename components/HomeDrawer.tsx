@@ -39,7 +39,8 @@ const HomeDrawer = () => (
     screenOptions={{
       drawerStyle: styles.container,
       drawerLabelStyle: Styles.globalStyles.basicText,
-      drawerActiveBackgroundColor: '#318CE7',
+      drawerActiveBackgroundColor: '#2C2C2E',
+      drawerActiveTintColor: '#BB86FC',
     }}
   >
     <Drawer.Screen
@@ -55,7 +56,7 @@ const HomeDrawer = () => (
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#0066b1',
+    backgroundColor: '#1C1C1E',
   },
   headerText: {
     fontSize: 25,
