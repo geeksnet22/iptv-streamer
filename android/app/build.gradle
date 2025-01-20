@@ -86,9 +86,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.iptv.streamer'
+    namespace 'com.tv.streamer'
     defaultConfig {
-        applicationId 'com.iptv.streamer'
+        applicationId 'com.tv.streamer'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 19

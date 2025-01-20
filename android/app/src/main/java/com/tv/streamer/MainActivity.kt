@@ -1,4 +1,4 @@
-package com.iptv.streamer
+package com.tv.streamer
 
 import android.os.Build
 import android.os.Bundle

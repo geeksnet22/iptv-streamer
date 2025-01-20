@@ -1,4 +1,4 @@
-package com.iptv.streamer
+package com.tv.streamer
 
 import android.os.Handler
 import android.os.Looper
@@ -7,7 +7,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
 
-import com.iptv.streamer.PlayerViewManager
+import com.tv.streamer.PlayerViewManager
 
 class PlayerModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 

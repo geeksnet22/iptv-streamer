@@ -10,13 +10,10 @@ import { ActivityIndicator } from 'react-native';
 import { Styles } from '../styles/styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GroupItem, RootStackParamList } from '../types';
-import { app } from '../config';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'GroupList'>;
 
 const All_CHANNELS_GROUP_NAME = 'All Channels';
-
-const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
 const GroupList = ({ navigation, route }: Props) => {
   const [parsedData, setParsedData] = React.useState<Playlist | null>(null);
@@ -34,7 +31,6 @@ const GroupList = ({ navigation, route }: Props) => {
         .then((response: AxiosResponse) => {
           setParsedData(parse(response.data));
           setIsLoading(false);
-          addPlayistToDb();
         })
         .catch((e) => {
           console.log(e);

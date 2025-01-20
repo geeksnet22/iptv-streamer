@@ -1,4 +1,4 @@
-package com.iptv.streamer
+package com.tv.streamer
 
 import android.app.Application
 import android.content.res.Configuration
@@ -16,7 +16,7 @@ import com.facebook.soloader.SoLoader
 import expo.modules.ApplicationLifecycleDispatcher
 import expo.modules.ReactNativeHostWrapper
 
-import com.iptv.streamer.PlayerViewPackage
+import com.tv.streamer.PlayerViewPackage
 
 class MainApplication : Application(), ReactApplication {
 

@@ -2,7 +2,7 @@
   "expo": {
     "name": "IptvStreamer",
     "slug": "IptvStreamer",
-    "version": "19.0.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "splash": {
@@ -13,11 +13,6 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "supportsTablet": true,
-      "requireFullScreen": true,
-      "bundleIdentifier": "com.iptv.iptvstreamer"
-    },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#FFFFFF"
@@ -28,8 +23,8 @@
         "android.permission.READ_PHONE_STATE",
         "android.permission.CAMERA"
       ],
-      "package": "com.iptv.streamer",
-      "versionCode": 19
+      "package": "com.tv.streamer",
+      "versionCode": 1
     },
     "web": {},
     "extra": {

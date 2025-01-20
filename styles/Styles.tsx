@@ -28,8 +28,8 @@ export const Styles = {
       borderRadius: 10,
       borderWidth: 1,
       padding: 5,
-      backgroundColor: '#1E1E1E', // Charcoal Black
-      color: '#FFFFFF', // White
+      backgroundColor: '#FFFFFF',
+      color: '#FFFFFF',
       height: 40,
       fontSize: 15,
       width: '100%',

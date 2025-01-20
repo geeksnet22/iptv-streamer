@@ -1,4 +1,4 @@
-package com.iptv.streamer
+package com.tv.streamer
 
 import android.content.Context
 import com.facebook.react.bridge.ReactApplicationContext
