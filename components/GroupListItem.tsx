@@ -1,7 +1,7 @@
 /** @format */
 
-import * as React from 'react';
-import { Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import React from 'react';
+import { Text, TouchableOpacity, Image, StyleSheet, View } from 'react-native';
 import { Styles } from '../styles/styles';
 
 type Props = {
@@ -19,10 +19,21 @@ const GroupListItem = ({
 }: Props) => {
   return (
     <TouchableOpacity
-      style={{ ...styles.container, ...Styles.globalStyles.secondaryContainer }}
+      style={StyleSheet.flatten([
+        styles.container,
+        Styles.globalStyles.secondaryContainer,
+      ])}
       onPress={onPress}
     >
-      <Text style={Styles.globalStyles.headerText}>{groupName}</Text>
+      <View style={styles.row}>
+        {groupIconUrl && (
+          <Image
+            style={styles.icon}
+            source={{ uri: groupIconUrl }}
+          />
+        )}
+        <Text style={Styles.globalStyles.headerText}>{groupName}</Text>
+      </View>
       <Text style={Styles.globalStyles.headerText}>{numberOfChannels}</Text>
     </TouchableOpacity>
   );
@@ -39,14 +50,15 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     justifyContent: 'space-between',
   },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   icon: {
     width: 30,
     height: 30,
     marginRight: 10,
     resizeMode: 'contain',
-  },
-  name: {
-    fontSize: 15,
   },
 });
 

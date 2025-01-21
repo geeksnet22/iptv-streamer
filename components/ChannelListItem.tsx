@@ -1,6 +1,6 @@
 /** @format */
 
-import * as React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Text, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Styles } from '../styles/styles';
 import { PlaylistItem } from 'iptv-playlist-parser';
@@ -21,7 +21,7 @@ const getIndexOfPlaylistInFavorites = (
     (p) =>
       p.name === playlistItem.name &&
       p.group.title === playlistItem.group.title &&
-      p.tvg.id == playlistItem.tvg.id
+      p.tvg.id === playlistItem.tvg.id
   );
 
 const ChannelListItem = ({
@@ -30,45 +30,36 @@ const ChannelListItem = ({
   onPress,
 }: Props) => {
   const dispatch = useAppDispatch();
-  const [isFavorited, setIsFavorited] = React.useState(
-    getIndexOfPlaylistInFavorites(playlistItem, favoriteChannels) !== -1
+
+  const isFavorited = useMemo(
+    () => getIndexOfPlaylistInFavorites(playlistItem, favoriteChannels) !== -1,
+    [playlistItem, favoriteChannels]
   );
+
+  const handleFavoritePress = useCallback(() => {
+    const index = getIndexOfPlaylistInFavorites(playlistItem, favoriteChannels);
+    dispatch(index === -1 ? add(playlistItem) : remove(index));
+  }, [dispatch, playlistItem, favoriteChannels]);
 
   return (
     <TouchableOpacity
-      style={{ ...styles.container, ...Styles.globalStyles.secondaryContainer }}
+      style={[styles.container, Styles.globalStyles.secondaryContainer]}
       onPress={onPress}
     >
-      <View
-        style={{ flexDirection: 'row', alignItems: 'center', maxWidth: '90%' }}
-      >
+      <View style={styles.row}>
         <Image
           style={styles.icon}
           source={
             playlistItem.tvg.logo !== ''
-              ? {
-                  uri: playlistItem.tvg.logo,
-                }
+              ? { uri: playlistItem.tvg.logo }
               : require('../assets/icons8-tv-50.png')
           }
         />
         <Text style={Styles.globalStyles.headerText}>{playlistItem.name}</Text>
       </View>
-      <TouchableOpacity
-        onPress={() => {
-          setIsFavorited(!isFavorited);
-          const index = getIndexOfPlaylistInFavorites(
-            playlistItem,
-            favoriteChannels
-          );
-          dispatch(index === -1 ? add(playlistItem) : remove(index));
-        }}
-      >
+      <TouchableOpacity onPress={handleFavoritePress}>
         <Image
-          style={{
-            height: 25,
-            width: 25,
-          }}
+          style={styles.favoriteIcon}
           source={
             isFavorited
               ? require('../assets/icons8-favorite-red.png')
@@ -91,11 +82,20 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     justifyContent: 'space-between',
   },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    maxWidth: '90%',
+  },
   icon: {
     width: 30,
     height: 30,
     marginRight: 10,
     resizeMode: 'contain',
+  },
+  favoriteIcon: {
+    height: 25,
+    width: 25,
   },
 });
 

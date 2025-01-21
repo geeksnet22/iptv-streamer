@@ -1,6 +1,6 @@
 /** @format */
 
-import * as React from 'react';
+import React from 'react';
 import { PlaylistItem } from 'iptv-playlist-parser';
 import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Styles } from '../styles/styles';

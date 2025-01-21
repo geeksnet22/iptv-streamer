@@ -1,11 +1,11 @@
 /** @format */
 
-import * as React from 'react';
+import React, { CSSProperties } from 'react';
 import { Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Styles } from '../styles/styles';
 
 type Props = {
-  style: React.CSSProperties;
+  style: CSSProperties;
   icon: number;
   onPress: () => void;
 };

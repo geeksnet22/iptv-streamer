@@ -1,6 +1,6 @@
 /** @format */
 
-import * as React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Platform, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { useAppSelector } from '../hooks';
 import { FlatList } from 'react-native-gesture-handler';
@@ -20,7 +20,7 @@ const FavoriteChannels = ({ navigation }: Props) => {
   );
   const isFocused = useIsFocused();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (Platform.OS === 'android' && isFocused) {
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
@@ -28,7 +28,7 @@ const FavoriteChannels = ({ navigation }: Props) => {
     }
   }, [isFocused]);
 
-  const renderItem = React.useCallback(
+  const renderItem = useCallback(
     (playlistItem: PlaylistItem) => (
       <ChannelListItem
         playlistItem={playlistItem}

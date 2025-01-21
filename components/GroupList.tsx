@@ -1,42 +1,52 @@
 /** @format */
 
-import * as React from 'react';
-import { SafeAreaView, StyleSheet, View, Alert, FlatList } from 'react-native';
-import SearchBar from './SearchBar';
-import GroupListItem from './GroupListItem';
-import axios, { AxiosResponse } from 'axios';
-import { parse, Playlist } from 'iptv-playlist-parser';
-import { ActivityIndicator } from 'react-native';
-import { Styles } from '../styles/styles';
+import React, { useEffect, useState, useCallback } from 'react';
+import axios from 'axios';
+import {
+  View,
+  ActivityIndicator,
+  SafeAreaView,
+  StyleSheet,
+  FlatList,
+  Alert,
+} from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GroupItem, RootStackParamList } from '../types';
+import GroupListItem from './GroupListItem';
+import { Styles } from '../styles/styles';
+import SearchBar from './SearchBar';
+import { parse, Playlist } from 'iptv-playlist-parser';
+import useMemoizedFilter from '../hooks/useMemoizedFilter';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'GroupList'>;
 
 const All_CHANNELS_GROUP_NAME = 'All Channels';
 
 const GroupList = ({ navigation, route }: Props) => {
-  const [parsedData, setParsedData] = React.useState<Playlist | null>(null);
-  const [searchText, setSearchText] = React.useState('');
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [parsedData, setParsedData] = useState<Playlist | null>(null);
+  const [searchText, setSearchText] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchAndSetPlaylistsData();
   }, []);
 
   const fetchAndSetPlaylistsData = async () => {
-    if (route.params.playlistURL) {
-      axios
-        .get(route.params.playlistURL)
-        .then((response: AxiosResponse) => {
-          setParsedData(parse(response.data));
-          setIsLoading(false);
-        })
-        .catch((e) => {
-          console.log(e);
-          setIsLoading(false);
-          Alert.alert('Error', 'Error loading playlist. Please try again!!!');
+    if (route.params.playlistUrl) {
+      try {
+        const response = await axios.get(route.params.playlistUrl, {
+          headers: {
+            'Accept-Encoding': 'gzip, deflate',
+          },
         });
+        const playList: Playlist = parse(response.data);
+        setParsedData(playList);
+        setIsLoading(false);
+      } catch (e) {
+        console.log(e);
+        setIsLoading(false);
+        Alert.alert('Error', 'Error loading playlist. Please try again!!!');
+      }
     }
   };
 
@@ -60,71 +70,69 @@ const GroupList = ({ navigation, route }: Props) => {
     );
   };
 
-  const getListOfGroupsAndNumberOfChannels = (): GroupItem[] => {
-    if (parsedData === null || parsedData?.items === undefined) return [];
-    const uniqueGroupsWithNumberOfChannels: Map<string, number> = new Map();
-    uniqueGroupsWithNumberOfChannels.set(
-      All_CHANNELS_GROUP_NAME,
-      parsedData.items.length
-    );
-    for (const playlistItem of parsedData.items) {
-      if (playlistItem.group.title === '') continue;
-      if (uniqueGroupsWithNumberOfChannels.has(playlistItem.group.title)) {
-        uniqueGroupsWithNumberOfChannels.set(
-          playlistItem.group.title,
-          uniqueGroupsWithNumberOfChannels.get(playlistItem.group.title) + 1
-        );
-      } else {
-        uniqueGroupsWithNumberOfChannels.set(playlistItem.group.title, 1);
+  const getListOfGroupsAndNumberOfChannels = useCallback((): GroupItem[] => {
+    if (!parsedData || !parsedData.items) return [];
+
+    const uniqueGroupsWithNumberOfChannels: Record<string, number> = {
+      [All_CHANNELS_GROUP_NAME]: parsedData.items.length,
+    };
+
+    parsedData.items.forEach((item) => {
+      const groupTitle = item.group.title;
+      if (groupTitle) {
+        if (uniqueGroupsWithNumberOfChannels[groupTitle]) {
+          uniqueGroupsWithNumberOfChannels[groupTitle]++;
+        } else {
+          uniqueGroupsWithNumberOfChannels[groupTitle] = 1;
+        }
       }
-    }
-    const groupsAndNumberOfChannels: GroupItem[] = [];
-    for (const [key, value] of uniqueGroupsWithNumberOfChannels) {
-      groupsAndNumberOfChannels.push({
-        groupTitle: key,
-        numberOfChannels: value,
-      });
-    }
-    return groupsAndNumberOfChannels;
-  };
+    });
+
+    return Object.entries(uniqueGroupsWithNumberOfChannels).map(
+      ([groupTitle, numberOfChannels]) => ({
+        groupTitle,
+        numberOfChannels,
+      })
+    );
+  }, [parsedData]);
+
+  const filteredGroups = useMemoizedFilter(
+    getListOfGroupsAndNumberOfChannels(),
+    searchText,
+    'groupTitle'
+  );
 
   return (
-    <SafeAreaView
-      style={{
-        ...Styles.globalStyles.primaryContainer,
-      }}
-    >
+    <SafeAreaView style={Styles.globalStyles.primaryContainer}>
       <SearchBar
         searchText={searchText}
         setSearchText={setSearchText}
       />
       <View style={styles.itemListContainer}>
         <FlatList
-          data={getListOfGroupsAndNumberOfChannels().filter((group) =>
-            group.groupTitle.toUpperCase().includes(searchText.toUpperCase())
-          )}
+          data={filteredGroups}
           renderItem={({ item: { groupTitle, numberOfChannels } }) =>
             renderGroupItem(groupTitle, numberOfChannels)
           }
           keyExtractor={({ groupTitle }) => groupTitle}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={5}
         />
       </View>
-      {isLoading ? (
+      {isLoading && (
         <ActivityIndicator
           size="large"
           style={Styles.globalStyles.activityIndicator}
         />
-      ) : (
-        <></>
       )}
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
   itemListContainer: {
-    margin: 5,
-    maxWidth: 600,
-    marginBottom: 30,
+    flex: 1,
   },
 });
 

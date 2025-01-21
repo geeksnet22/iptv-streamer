@@ -1,11 +1,11 @@
 /** @format */
 
-import * as React from 'react';
+import React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 
 type Props = {
   searchText: string;
-  setSearchText: React.Dispatch<React.SetStateAction<string>>;
+  setSearchText: Dispatch<SetStateAction<string>>;
 };
 
 function SearchBar({ searchText, setSearchText }: Props) {

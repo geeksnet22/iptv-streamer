@@ -1,6 +1,6 @@
 /** @format */
 
-import * as React from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import { Styles } from '../styles/styles';
 type Props = {
   label: string;
   inputText: string;
-  setInputText: React.Dispatch<React.SetStateAction<string>>;
+  setInputText: Dispatch<SetStateAction<string>>;
   placeholder: string;
   textContentType: TextInputProps['textContentType'];
   editable: boolean;

@@ -1,6 +1,6 @@
 /** @format */
 
-import * as React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useAppDispatch } from '../hooks';
 import { useIsFocused } from '@react-navigation/native';
 import { FlatList, Platform, SafeAreaView, StyleSheet } from 'react-native';
@@ -19,7 +19,7 @@ const RecentChannels = ({ recentChannels }: Props) => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (Platform.OS === 'android' && isFocused) {
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
@@ -27,7 +27,7 @@ const RecentChannels = ({ recentChannels }: Props) => {
     }
   }, [isFocused]);
 
-  const renderItem = React.useCallback(
+  const renderItem = useCallback(
     (playlistItem: PlaylistItem) => (
       <RecentChannelsItem
         playlistItem={playlistItem}

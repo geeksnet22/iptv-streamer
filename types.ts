@@ -8,7 +8,7 @@ export type RootStackParamList = {
   };
   GroupList: {
     playlistName: string;
-    playlistURL: string | null;
+    playlistUrl: string | null;
   };
   ChannelList: {
     groupTitle: string;

@@ -1,6 +1,6 @@
 /** @format */
 
-import * as React from 'react';
+import React from 'react';
 import { Text, Image, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Styles } from '../styles/styles';
@@ -11,7 +11,7 @@ const REMOVE_LOGO_LOCATION = '../assets/icons8-remove-48.png';
 
 type Props = {
   playlistName: string;
-  playlistURL: string | null;
+  playlistUrl: string | null;
   fetchAndSetExistingPlaylists: () => void;
   navigation: NativeStackNavigationProp<
     RootStackParamList,
@@ -22,7 +22,7 @@ type Props = {
 
 const ExistingPlaylistItem = ({
   playlistName,
-  playlistURL,
+  playlistUrl,
   fetchAndSetExistingPlaylists,
   navigation,
 }: Props) => {
@@ -43,7 +43,7 @@ const ExistingPlaylistItem = ({
       onPress={() =>
         navigation.navigate('GroupList', {
           playlistName: playlistName,
-          playlistURL: playlistURL,
+          playlistUrl: playlistUrl,
         })
       }
     >

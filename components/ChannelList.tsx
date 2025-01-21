@@ -1,6 +1,6 @@
 /** @format */
 
-import * as React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   FlatList,
@@ -18,18 +18,19 @@ import { RootStackParamList } from '../types';
 import { PlaylistItem } from 'iptv-playlist-parser';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { add } from '../redux/slices/recentChannelsSlice';
+import useMemoizedFilter from '../hooks/useMemoizedFilter';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ChannelList'>;
 
 const ChannelList = ({ route, navigation }: Props) => {
-  const [searchText, setSearchText] = React.useState('');
+  const [searchText, setSearchText] = useState('');
   const isFocused = useIsFocused();
   const favoriteChannels = useAppSelector(
     (state) => state.favoriteChannels.value
   );
   const dispatch = useAppDispatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (Platform.OS === 'android' && isFocused) {
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
@@ -37,41 +38,42 @@ const ChannelList = ({ route, navigation }: Props) => {
     }
   }, [isFocused]);
 
-  const renderItem = React.useCallback(
-    (playlistItem: PlaylistItem) => (
+  const filteredChannels = useMemoizedFilter(
+    route.params.channelList,
+    searchText,
+    ['name']
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: PlaylistItem }) => (
       <ChannelListItem
-        playlistItem={playlistItem}
+        playlistItem={item}
         favoriteChannels={favoriteChannels}
         onPress={() => {
-          dispatch(add(playlistItem));
-          navigation.navigate('VideoPlayer', { uri: playlistItem.url });
+          dispatch(add(item));
+          navigation.navigate('VideoPlayer', { uri: item.url });
         }}
       />
     ),
-    [favoriteChannels]
+    [favoriteChannels, dispatch, navigation]
   );
 
   return (
-    <SafeAreaView
-      style={{
-        ...Styles.globalStyles.primaryContainer,
-      }}
-    >
+    <SafeAreaView style={Styles.globalStyles.primaryContainer}>
       <SearchBar
         searchText={searchText}
         setSearchText={setSearchText}
       />
       <View style={styles.itemListContainer}>
         <FlatList
-          data={route.params.channelList?.filter((playlistItem) =>
-            playlistItem.name
-              .toUpperCase()
-              .includes(searchText.trim().toUpperCase())
-          )}
-          renderItem={({ item }) => renderItem(item)}
+          data={filteredChannels}
+          renderItem={renderItem}
           keyExtractor={(item) =>
             item.name + item.tvg.id + item.group.title + item.url
           }
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={5}
         />
       </View>
     </SafeAreaView>

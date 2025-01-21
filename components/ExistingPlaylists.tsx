@@ -1,7 +1,7 @@
 /** @format */
 
-import * as React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ExistingPlaylistItem from './ExistingPlaylistItem';
 import { useIsFocused } from '@react-navigation/native';
@@ -18,13 +18,11 @@ const ADD_LOGO_ADDRESS = '../assets/add-gb2bab072c_640.png';
 type Props = NativeStackScreenProps<RootStackParamList, 'ExistingPlaylists'>;
 
 const ExistingPlaylists = ({ navigation }: Props) => {
-  const [playlists, setPlaylists] = React.useState<readonly KeyValuePair[]>(
-    [] as readonly KeyValuePair[]
-  );
+  const [playlists, setPlaylists] = useState<readonly KeyValuePair[]>([]);
   const isFocused = useIsFocused();
   const recentChannels = useAppSelector((state) => state.recentChannels.value);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isFocused) {
       fetchAndSetExistingPlaylists();
     }
@@ -32,15 +30,13 @@ const ExistingPlaylists = ({ navigation }: Props) => {
 
   const fetchAndSetExistingPlaylists = async () => {
     try {
-      await AsyncStorage.getAllKeys().then((keys) => {
-        AsyncStorage.multiGet(keys).then((playlists) =>
-          setPlaylists(
-            playlists.filter((playlist) => !playlist[0]?.startsWith('persist:'))
-          )
-        );
-      });
+      const keys = await AsyncStorage.getAllKeys();
+      const playlists = await AsyncStorage.multiGet(keys);
+      setPlaylists(
+        playlists.filter((playlist) => !playlist[0]?.startsWith('persist:'))
+      );
     } catch (e) {
-      console.log(e);
+      console.error('Failed to fetch playlists:', e);
     }
   };
 
@@ -49,26 +45,32 @@ const ExistingPlaylists = ({ navigation }: Props) => {
       existingPlaylistNames: playlists.map((playlist) => playlist[0]),
     });
 
-  type ItemProps = {
-    playlistName: string;
-    playlistUrl: string | null;
-  };
+  const renderItem = useCallback(
+    ({ item }: { item: { playlistName: string; playlistUrl: string } }) => (
+      <ExistingPlaylistItem
+        playlistName={item.playlistName}
+        playlistUrl={item.playlistUrl}
+        fetchAndSetExistingPlaylists={fetchAndSetExistingPlaylists}
+        navigation={navigation}
+      />
+    ),
+    [fetchAndSetExistingPlaylists, navigation]
+  );
 
-  const renderItem = ({ playlistName, playlistUrl }: ItemProps) => (
-    <ExistingPlaylistItem
-      playlistName={playlistName}
-      playlistURL={playlistUrl}
-      fetchAndSetExistingPlaylists={fetchAndSetExistingPlaylists}
-      navigation={navigation}
-    />
+  const data = useMemo(
+    () =>
+      playlists
+        .filter((playlist) => playlist[1] !== null)
+        .map((playlist) => ({
+          playlistName: playlist[0],
+          playlistUrl: playlist[1] as string,
+        })),
+    [playlists]
   );
 
   return (
     <View
-      style={{
-        ...styles.container,
-        ...Styles.globalStyles.primaryContainer,
-      }}
+      style={{ ...styles.container, ...Styles.globalStyles.primaryContainer }}
     >
       {recentChannels.length > 0 ? (
         <View>
@@ -83,9 +85,7 @@ const ExistingPlaylists = ({ navigation }: Props) => {
           </Text>
           <RecentChannels recentChannels={recentChannels} />
         </View>
-      ) : (
-        <></>
-      )}
+      ) : null}
       {playlists.length === 0 ? (
         <Text
           style={{
@@ -111,16 +111,8 @@ const ExistingPlaylists = ({ navigation }: Props) => {
           </Text>
           <View style={styles.playlistWrapper}>
             <FlatList
-              data={playlists.map((playlist) => ({
-                playlistName: playlist[0],
-                playlistUrl: playlist[1],
-              }))}
-              renderItem={({ item }) =>
-                renderItem({
-                  playlistName: item.playlistName,
-                  playlistUrl: item.playlistUrl,
-                })
-              }
+              data={data}
+              renderItem={renderItem}
               keyExtractor={(item) => item.playlistName}
             />
           </View>

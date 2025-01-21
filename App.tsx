@@ -1,6 +1,6 @@
 /** @format */
 
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -19,7 +19,7 @@ import * as SplashScreen from 'expo-splash-screen';
 const App = () => {
   const RootStack = createStackNavigator<RootStackParamList>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const prepare = async () => {
       await SplashScreen.preventAutoHideAsync();
       setTimeout(async () => {

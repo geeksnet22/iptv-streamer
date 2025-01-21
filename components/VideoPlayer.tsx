@@ -1,6 +1,6 @@
 /** @format */
 
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, StatusBar } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { Styles } from '../styles/styles';
@@ -38,7 +38,7 @@ const handleOrientationChange = async () => {
 };
 
 const VideoPlayer = ({ route }: Props) => {
-  React.useEffect(() => {
+  useEffect(() => {
     lockOrientation();
     StatusBar.setHidden(true);
     const subscription = ScreenOrientation.addOrientationChangeListener(

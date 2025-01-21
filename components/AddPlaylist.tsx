@@ -1,6 +1,6 @@
 /** @format */
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -21,10 +21,9 @@ import { RootStackParamList } from '../types';
 type Props = NativeStackScreenProps<RootStackParamList, 'AddPlaylist'>;
 
 function AddPlaylist({ route, navigation }: Props) {
-  const [playlistName, setPlaylistName] = React.useState('');
-  const [playlistURL, setplaylistURL] = React.useState('');
-  const [showActivityIndicator, setShowActivityIndicator] =
-    React.useState(false);
+  const [playlistName, setPlaylistName] = useState('');
+  const [playlistURL, setplaylistURL] = useState('');
+  const [showActivityIndicator, setShowActivityIndicator] = useState(false);
   const addPlayist = () => {
     if (!isValidInputData()) {
       return;
