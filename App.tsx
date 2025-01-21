@@ -13,10 +13,24 @@ import { Provider } from 'react-redux';
 import { persistor, store } from './redux/store';
 import HomeDrawer from './components/HomeDrawer';
 import { PersistGate } from 'redux-persist/integration/react';
-import { Text } from 'react-native';
+import { StatusBar, Text } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen';
 
 const App = () => {
   const RootStack = createStackNavigator<RootStackParamList>();
+
+  React.useEffect(() => {
+    const prepare = async () => {
+      await SplashScreen.preventAutoHideAsync();
+      setTimeout(async () => {
+        await SplashScreen.hideAsync();
+        StatusBar.setHidden(false);
+      }, 1000);
+    };
+
+    prepare();
+  }, []);
+
   return (
     <Provider store={store}>
       <PersistGate
@@ -25,6 +39,7 @@ const App = () => {
       >
         <GestureHandlerRootView style={{ flex: 1 }}>
           <NavigationContainer>
+            <StatusBar hidden={true} />
             <RootStack.Navigator>
               <RootStack.Screen
                 name="HomeDrawer"

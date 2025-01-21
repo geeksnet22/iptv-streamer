@@ -5,8 +5,10 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
     "splash": {
-      "resizeMode": "contain",
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -15,6 +17,7 @@
     "assetBundlePatterns": ["**/*"],
     "android": {
       "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "blockedPermissions": [
@@ -26,11 +29,13 @@
       "package": "com.tv.streamer",
       "versionCode": 1
     },
-    "web": {},
     "extra": {
       "eas": {
         "projectId": "4c4fa2d2-fe4b-47ef-ad97-ae09288b581f"
       }
+    },
+    "ios": {
+      "bundleIdentifier": "com.tv.streamer"
     }
   }
 }

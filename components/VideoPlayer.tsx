@@ -40,7 +40,7 @@ const handleOrientationChange = async () => {
 const VideoPlayer = ({ route }: Props) => {
   React.useEffect(() => {
     lockOrientation();
-
+    StatusBar.setHidden(true);
     const subscription = ScreenOrientation.addOrientationChangeListener(
       handleOrientationChange
     );
@@ -48,6 +48,7 @@ const VideoPlayer = ({ route }: Props) => {
     return () => {
       PlayerView.stop();
       ScreenOrientation.removeOrientationChangeListener(subscription);
+      StatusBar.setHidden(false);
     };
   }, []);
 

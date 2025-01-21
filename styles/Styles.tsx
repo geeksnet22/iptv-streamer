@@ -29,7 +29,7 @@ export const Styles = {
       borderWidth: 1,
       padding: 5,
       backgroundColor: '#FFFFFF',
-      color: '#FFFFFF',
+      color: '#1E1E1E',
       height: 40,
       fontSize: 15,
       width: '100%',
