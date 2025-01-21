@@ -17,12 +17,13 @@ import LabelAndTextInputField from './LabelAndTextInputField';
 import { Styles } from '../styles/styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
+import { PlaylistData } from '../types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddPlaylist'>;
 
 function AddPlaylist({ route, navigation }: Props) {
   const [playlistName, setPlaylistName] = useState('');
-  const [playlistURL, setplaylistURL] = useState('');
+  const [playlistUrl, setplaylistUrl] = useState('');
   const [showActivityIndicator, setShowActivityIndicator] = useState(false);
   const addPlayist = () => {
     if (!isValidInputData()) {
@@ -45,7 +46,7 @@ function AddPlaylist({ route, navigation }: Props) {
         `Playlist with name ${playlistName.trim()} already exists. Please use a different name!!!`
       );
       isValidInputData = false;
-    } else if (playlistURL === '') {
+    } else if (playlistUrl === '') {
       Alert.alert('Error', 'Please enter playlist url!!!');
       isValidInputData = false;
     }
@@ -54,21 +55,28 @@ function AddPlaylist({ route, navigation }: Props) {
 
   const storePlaylistAndMoveToExistingPlaylistsIfSuccessful = async () => {
     try {
-      await AsyncStorage.setItem(playlistName.trim(), playlistURL.trim()).then(
-        (value) => {
-          setShowActivityIndicator(false);
-          navigation.navigate('HomeDrawer');
-          Platform.OS === 'android'
-            ? ToastAndroid.show(
-                'Playlist successfully added!!!',
-                ToastAndroid.SHORT
-              )
-            : {};
-        }
-      );
+      const storedPlaylists = await AsyncStorage.getItem('savedPlaylists');
+      const playlists: { [key: string]: PlaylistData } = storedPlaylists
+        ? JSON.parse(storedPlaylists)
+        : {};
+
+      playlists[playlistName.trim()] = {
+        url: playlistUrl.trim(),
+        parsedData: null,
+      };
+
+      await AsyncStorage.setItem('savedPlaylists', JSON.stringify(playlists));
+      setShowActivityIndicator(false);
+      navigation.navigate('HomeDrawer');
+      if (Platform.OS === 'android') {
+        ToastAndroid.show('Playlist successfully added!!!', ToastAndroid.SHORT);
+      } else {
+        Alert.alert('Success', 'Playlist successfully added!!!');
+      }
     } catch (e) {
       console.log(e);
-      Alert.alert('Error', 'Error saving the playlist. Please try again.');
+      setShowActivityIndicator(false);
+      Alert.alert('Error', 'Failed to save playlist. Please try again!!!');
     }
   };
 
@@ -96,8 +104,8 @@ function AddPlaylist({ route, navigation }: Props) {
         />
         <LabelAndTextInputField
           label="M3U Playlist URL"
-          inputText={playlistURL}
-          setInputText={setplaylistURL}
+          inputText={playlistUrl}
+          setInputText={setplaylistUrl}
           placeholder="Playlist URL..."
           textContentType="URL"
           editable={!showActivityIndicator}

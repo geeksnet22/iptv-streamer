@@ -1,24 +1,32 @@
 /** @format */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ExistingPlaylistItem from './ExistingPlaylistItem';
 import { useIsFocused } from '@react-navigation/native';
 import FloatingRoundButton from './FloatingRoundButton';
 import { Styles } from '../styles/styles';
-import { KeyValuePair } from '@react-native-async-storage/async-storage/lib/typescript/types';
+import { PlaylistData } from '../types'; // Import the PlaylistData type
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import RecentChannels from './RecentChannels';
 import { useAppSelector } from '../hooks';
 
-const ADD_LOGO_ADDRESS = '../assets/add-gb2bab072c_640.png';
-
 type Props = NativeStackScreenProps<RootStackParamList, 'ExistingPlaylists'>;
 
 const ExistingPlaylists = ({ navigation }: Props) => {
-  const [playlists, setPlaylists] = useState<readonly KeyValuePair[]>([]);
+  const [playlists, setPlaylists] = useState<{ [key: string]: PlaylistData }>(
+    {}
+  );
+  const [isLoading, setIsLoading] = useState(true);
   const isFocused = useIsFocused();
   const recentChannels = useAppSelector((state) => state.recentChannels.value);
 
@@ -30,26 +38,33 @@ const ExistingPlaylists = ({ navigation }: Props) => {
 
   const fetchAndSetExistingPlaylists = async () => {
     try {
-      const keys = await AsyncStorage.getAllKeys();
-      const playlists = await AsyncStorage.multiGet(keys);
-      setPlaylists(
-        playlists.filter((playlist) => !playlist[0]?.startsWith('persist:'))
-      );
+      const storedPlaylists = await AsyncStorage.getItem('savedPlaylists');
+      if (storedPlaylists) {
+        const parsedPlaylists = JSON.parse(storedPlaylists);
+        setPlaylists(parsedPlaylists);
+      }
     } catch (e) {
       console.error('Failed to fetch playlists:', e);
+      Alert.alert('Error', 'Failed to fetch playlists. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const buttonOnPress = () =>
     navigation.navigate('AddPlaylist', {
-      existingPlaylistNames: playlists.map((playlist) => playlist[0]),
+      existingPlaylistNames: Object.keys(playlists),
     });
 
   const renderItem = useCallback(
-    ({ item }: { item: { playlistName: string; playlistUrl: string } }) => (
+    ({
+      item: { playlistName, playlistUrl },
+    }: {
+      item: { playlistName: string; playlistUrl: string };
+    }) => (
       <ExistingPlaylistItem
-        playlistName={item.playlistName}
-        playlistUrl={item.playlistUrl}
+        playlistName={playlistName}
+        playlistUrl={playlistUrl}
         fetchAndSetExistingPlaylists={fetchAndSetExistingPlaylists}
         navigation={navigation}
       />
@@ -59,12 +74,10 @@ const ExistingPlaylists = ({ navigation }: Props) => {
 
   const data = useMemo(
     () =>
-      playlists
-        .filter((playlist) => playlist[1] !== null)
-        .map((playlist) => ({
-          playlistName: playlist[0],
-          playlistUrl: playlist[1] as string,
-        })),
+      Object.keys(playlists).map((playlistName) => ({
+        playlistName,
+        playlistUrl: playlists[playlistName].url,
+      })),
     [playlists]
   );
 
@@ -72,21 +85,12 @@ const ExistingPlaylists = ({ navigation }: Props) => {
     <View
       style={{ ...styles.container, ...Styles.globalStyles.primaryContainer }}
     >
-      {recentChannels.length > 0 ? (
-        <View>
-          <Text
-            style={{
-              ...Styles.globalStyles.headerText,
-              ...Styles.globalStyles.secondaryContainer,
-              ...styles.header,
-            }}
-          >
-            Recently Played
-          </Text>
-          <RecentChannels recentChannels={recentChannels} />
-        </View>
-      ) : null}
-      {playlists.length === 0 ? (
+      {isLoading ? (
+        <ActivityIndicator
+          size="large"
+          color="#0000ff"
+        />
+      ) : data.length === 0 ? (
         <Text
           style={{
             ...Styles.globalStyles.basicText,
@@ -100,6 +104,20 @@ const ExistingPlaylists = ({ navigation }: Props) => {
         </Text>
       ) : (
         <>
+          {recentChannels.length > 0 && (
+            <View>
+              <Text
+                style={{
+                  ...Styles.globalStyles.headerText,
+                  ...Styles.globalStyles.secondaryContainer,
+                  ...styles.header,
+                }}
+              >
+                Recently Played
+              </Text>
+              <RecentChannels recentChannels={recentChannels} />
+            </View>
+          )}
           <Text
             style={{
               ...Styles.globalStyles.headerText,
@@ -120,7 +138,7 @@ const ExistingPlaylists = ({ navigation }: Props) => {
       )}
       <FloatingRoundButton
         style={styles.floatingButton}
-        icon={require(ADD_LOGO_ADDRESS)}
+        icon={require('../assets/add-gb2bab072c_640.png')}
         onPress={buttonOnPress}
       />
     </View>

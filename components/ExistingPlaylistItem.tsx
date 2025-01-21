@@ -28,9 +28,13 @@ const ExistingPlaylistItem = ({
 }: Props) => {
   const removePlaylist = async () => {
     try {
-      await AsyncStorage.removeItem(playlistName).then((response) =>
-        fetchAndSetExistingPlaylists()
-      );
+      const storedPlaylists = await AsyncStorage.getItem('savedPlaylists');
+      if (storedPlaylists) {
+        const playlists = JSON.parse(storedPlaylists);
+        delete playlists[playlistName];
+        await AsyncStorage.setItem('savedPlaylists', JSON.stringify(playlists));
+        fetchAndSetExistingPlaylists();
+      }
     } catch (e) {
       console.log(e);
       Alert.alert('Error', 'Not able to remove, please try again!!!');

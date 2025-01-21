@@ -1,6 +1,6 @@
 /** @format */
 
-import { PlaylistItem } from 'iptv-playlist-parser';
+import { Playlist, PlaylistItem } from 'iptv-playlist-parser';
 
 export type RootStackParamList = {
   AddPlaylist: {
@@ -20,6 +20,11 @@ export type RootStackParamList = {
   ExistingPlaylists: undefined;
   FavoriteChannels: undefined;
   HomeDrawer: undefined;
+};
+
+export type PlaylistData = {
+  url: string;
+  parsedData: Playlist | null;
 };
 
 export interface GroupItem {
