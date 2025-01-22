@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect } from 'react';
 import { Platform, SafeAreaView, StyleSheet, Text } from 'react-native';
-import { useAppSelector } from '../hooks';
+import { useAppDispatch, useAppSelector } from '../hooks';
 import { FlatList } from 'react-native-gesture-handler';
 import ChannelListItem from './ChannelListItem';
 import { PlaylistItem } from 'iptv-playlist-parser';
@@ -11,6 +11,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import { useIsFocused } from '@react-navigation/native';
 import { RootStackParamList } from '../types';
 import { Styles } from '../styles/styles';
+import { add } from '../redux/slices/recentChannelsSlice';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FavoriteChannels'>;
 
@@ -18,6 +19,7 @@ const FavoriteChannels = ({ navigation }: Props) => {
   const favoriteChannels = useAppSelector(
     (state) => state.favoriteChannels.value
   );
+  const dispatch = useAppDispatch();
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -33,9 +35,10 @@ const FavoriteChannels = ({ navigation }: Props) => {
       <ChannelListItem
         playlistItem={playlistItem}
         favoriteChannels={favoriteChannels}
-        onPress={() =>
-          navigation.navigate('VideoPlayer', { uri: playlistItem.url })
-        }
+        onPress={() => {
+          dispatch(add(playlistItem));
+          navigation.navigate('VideoPlayer', { uri: playlistItem.url });
+        }}
       />
     ),
     [favoriteChannels]
