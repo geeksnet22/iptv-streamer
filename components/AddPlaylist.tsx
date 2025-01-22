@@ -32,10 +32,11 @@ function AddPlaylist({ navigation }: Props) {
   );
 
   const addPlayist = () => {
-    setShowActivityIndicator(true);
     if (!isValidInputData()) {
       return;
     }
+
+    setShowActivityIndicator(true);
     storePlaylistAndMoveToExistingPlaylistsIfSuccessful();
   };
 
