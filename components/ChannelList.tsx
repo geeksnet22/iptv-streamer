@@ -1,16 +1,8 @@
 /** @format */
 
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  View,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  Platform,
-} from 'react-native';
+import { View, FlatList, SafeAreaView, StyleSheet } from 'react-native';
 import SearchBar from './SearchBar';
-import * as ScreenOrientation from 'expo-screen-orientation';
-import { useIsFocused } from '@react-navigation/native';
 import ChannelListItem from './ChannelListItem';
 import { Styles } from '../styles/styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -22,27 +14,26 @@ import useMemoizedFilter from '../hooks/useMemoizedFilter';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ChannelList'>;
 
+const All_CHANNELS_GROUP_NAME = 'All Channels';
+
 const ChannelList = ({ route, navigation }: Props) => {
   const [searchText, setSearchText] = useState('');
-  const isFocused = useIsFocused();
+
   const favoriteChannels = useAppSelector(
     (state) => state.favoriteChannels.value
   );
   const dispatch = useAppDispatch();
+  const channels = useAppSelector((state) => {
+    const playlist = state.savedPlaylists[route.params.playlistName];
+    if (!playlist) return [];
+    return route.params.groupTitle === All_CHANNELS_GROUP_NAME
+      ? playlist.parsedData.items
+      : playlist.parsedData.items.filter(
+          (item) => item.group.title === route.params.groupTitle
+        );
+  });
 
-  useEffect(() => {
-    if (Platform.OS === 'android' && isFocused) {
-      ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.PORTRAIT_UP
-      ).catch((error) => console.log(error));
-    }
-  }, [isFocused]);
-
-  const filteredChannels = useMemoizedFilter(
-    route.params.channelList,
-    searchText,
-    ['name']
-  );
+  const filteredChannels = useMemoizedFilter(channels, searchText, 'name');
 
   const renderItem = useCallback(
     ({ item }: { item: PlaylistItem }) => (
@@ -68,9 +59,7 @@ const ChannelList = ({ route, navigation }: Props) => {
         <FlatList
           data={filteredChannels}
           renderItem={renderItem}
-          keyExtractor={(item) =>
-            item.name + item.tvg.id + item.group.title + item.url
-          }
+          keyExtractor={(item) => item.url}
           initialNumToRender={10}
           maxToRenderPerBatch={10}
           windowSize={5}

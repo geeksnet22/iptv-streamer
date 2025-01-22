@@ -11,8 +11,8 @@ export type RootStackParamList = {
     playlistUrl: string | null;
   };
   ChannelList: {
+    playlistName: string;
     groupTitle: string;
-    channelList: PlaylistItem[] | undefined;
   };
   VideoPlayer: {
     uri: string;

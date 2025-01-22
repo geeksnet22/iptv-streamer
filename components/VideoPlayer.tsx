@@ -49,6 +49,9 @@ const VideoPlayer = ({ route }: Props) => {
       PlayerView.stop();
       ScreenOrientation.removeOrientationChangeListener(subscription);
       StatusBar.setHidden(false);
+      ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
     };
   }, []);
 

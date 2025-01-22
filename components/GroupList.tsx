@@ -17,34 +17,32 @@ import { Styles } from '../styles/styles';
 import SearchBar from './SearchBar';
 import { parse, Playlist } from 'iptv-playlist-parser';
 import useMemoizedFilter from '../hooks/useMemoizedFilter';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { setPlaylist } from '../redux/slices/savedPlaylistsSlice';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'GroupList'>;
 
 const All_CHANNELS_GROUP_NAME = 'All Channels';
 
 const GroupList = ({ navigation, route }: Props) => {
-  const [parsedData, setParsedData] = useState<Playlist | null>(null);
   const [searchText, setSearchText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
+  const dispatch = useAppDispatch();
+  const parsedData = useAppSelector(
+    (state) => state.savedPlaylists[route.params.playlistName]?.parsedData
+  );
+
   useEffect(() => {
-    fetchAndSetPlaylistsData();
-  }, []);
+    if (!parsedData) {
+      fetchAndSetPlaylistsData();
+    } else {
+      setIsLoading(false);
+    }
+  }, [parsedData]);
 
   const fetchAndSetPlaylistsData = async () => {
     try {
-      const storedPlaylists = await AsyncStorage.getItem('savedPlaylists');
-      if (storedPlaylists) {
-        const playlists = JSON.parse(storedPlaylists);
-        const playlistData = playlists[route.params.playlistName];
-        if (playlistData && playlistData.parsedData) {
-          setParsedData(playlistData.parsedData);
-          setIsLoading(false);
-          return;
-        }
-      }
-
       if (route.params.playlistUrl) {
         const response = await axios.get(route.params.playlistUrl, {
           headers: {
@@ -52,24 +50,27 @@ const GroupList = ({ navigation, route }: Props) => {
           },
         });
         const playList: Playlist = parse(response.data);
-        const playlists = storedPlaylists ? JSON.parse(storedPlaylists) : {};
-        playlists[route.params.playlistName] = {
-          url: route.params.playlistUrl,
-          parsedData: playList,
-        };
         try {
-          await AsyncStorage.setItem(
-            'savedPlaylists',
-            JSON.stringify(playlists)
+          dispatch(
+            setPlaylist({
+              playlistName: route.params.playlistName,
+              playlistData: {
+                url: route.params.playlistUrl,
+                parsedData: playList,
+              },
+            })
           );
         } catch (storageError) {
-          console.error('Failed to save data to AsyncStorage:', storageError);
+          console.error(
+            'Failed to save data to Redux/AsyncStorage:',
+            storageError
+          );
         }
-        setParsedData(playList);
+        setIsLoading(false);
         setIsLoading(false);
       }
     } catch (e) {
-      console.log(e);
+      console.log('Error loading playlist: ' + e);
       setIsLoading(false);
       Alert.alert('Error', 'Error loading playlist. Please try again!!!');
     }
@@ -81,13 +82,8 @@ const GroupList = ({ navigation, route }: Props) => {
         groupName={groupTitle}
         onPress={() =>
           navigation.navigate('ChannelList', {
+            playlistName: route.params.playlistName,
             groupTitle: groupTitle,
-            channelList:
-              groupTitle === All_CHANNELS_GROUP_NAME
-                ? parsedData?.items
-                : parsedData?.items.filter(
-                    (playlistItem) => playlistItem.group.title === groupTitle
-                  ),
           })
         }
         numberOfChannels={numberOfChannels}

@@ -1,83 +1,43 @@
 /** @format */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useMemo } from 'react';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { useAppSelector } from '../hooks';
 import ExistingPlaylistItem from './ExistingPlaylistItem';
-import { useIsFocused } from '@react-navigation/native';
 import FloatingRoundButton from './FloatingRoundButton';
 import { Styles } from '../styles/styles';
-import { PlaylistData } from '../types'; // Import the PlaylistData type
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import RecentChannels from './RecentChannels';
-import { useAppSelector } from '../hooks';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ExistingPlaylists'>;
 
 const ExistingPlaylists = ({ navigation }: Props) => {
-  const [playlists, setPlaylists] = useState<{ [key: string]: PlaylistData }>(
-    {}
-  );
-  const [isLoading, setIsLoading] = useState(true);
-  const isFocused = useIsFocused();
   const recentChannels = useAppSelector((state) => state.recentChannels.value);
+  const playlists = useAppSelector((state) => state.savedPlaylists);
 
-  useEffect(() => {
-    if (isFocused) {
-      fetchAndSetExistingPlaylists();
-    }
-  }, [isFocused]);
+  const buttonOnPress = () => navigation.navigate('AddPlaylist');
 
-  const fetchAndSetExistingPlaylists = async () => {
-    try {
-      const storedPlaylists = await AsyncStorage.getItem('savedPlaylists');
-      if (storedPlaylists) {
-        const parsedPlaylists = JSON.parse(storedPlaylists);
-        setPlaylists(parsedPlaylists);
-      }
-    } catch (e) {
-      console.error('Failed to fetch playlists:', e);
-      Alert.alert('Error', 'Failed to fetch playlists. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const buttonOnPress = () =>
-    navigation.navigate('AddPlaylist', {
-      existingPlaylistNames: Object.keys(playlists),
-    });
-
-  const renderItem = useCallback(
-    ({
-      item: { playlistName, playlistUrl },
-    }: {
-      item: { playlistName: string; playlistUrl: string };
-    }) => (
-      <ExistingPlaylistItem
-        playlistName={playlistName}
-        playlistUrl={playlistUrl}
-        fetchAndSetExistingPlaylists={fetchAndSetExistingPlaylists}
-        navigation={navigation}
-      />
-    ),
-    [fetchAndSetExistingPlaylists, navigation]
+  const renderItem = ({
+    item,
+  }: {
+    item: { playlistName: string; playlistUrl: string };
+  }) => (
+    <ExistingPlaylistItem
+      playlistName={item.playlistName}
+      playlistUrl={item.playlistUrl}
+      navigation={navigation}
+    />
   );
 
   const data = useMemo(
     () =>
-      Object.keys(playlists).map((playlistName) => ({
-        playlistName,
-        playlistUrl: playlists[playlistName].url,
-      })),
+      Object.keys(playlists)
+        .filter((name) => name !== '_persist')
+        .map((playlistName) => ({
+          playlistName,
+          playlistUrl: playlists[playlistName].url,
+        })),
     [playlists]
   );
 
@@ -85,12 +45,21 @@ const ExistingPlaylists = ({ navigation }: Props) => {
     <View
       style={{ ...styles.container, ...Styles.globalStyles.primaryContainer }}
     >
-      {isLoading ? (
-        <ActivityIndicator
-          size="large"
-          color="#0000ff"
-        />
-      ) : data.length === 0 ? (
+      {recentChannels.length > 0 ? (
+        <View>
+          <Text
+            style={{
+              ...Styles.globalStyles.headerText,
+              ...Styles.globalStyles.secondaryContainer,
+              ...styles.header,
+            }}
+          >
+            Recently Played
+          </Text>
+          <RecentChannels recentChannels={recentChannels} />
+        </View>
+      ) : null}
+      {data.length === 0 ? (
         <Text
           style={{
             ...Styles.globalStyles.basicText,
@@ -104,20 +73,6 @@ const ExistingPlaylists = ({ navigation }: Props) => {
         </Text>
       ) : (
         <>
-          {recentChannels.length > 0 && (
-            <View>
-              <Text
-                style={{
-                  ...Styles.globalStyles.headerText,
-                  ...Styles.globalStyles.secondaryContainer,
-                  ...styles.header,
-                }}
-              >
-                Recently Played
-              </Text>
-              <RecentChannels recentChannels={recentChannels} />
-            </View>
-          )}
           <Text
             style={{
               ...Styles.globalStyles.headerText,

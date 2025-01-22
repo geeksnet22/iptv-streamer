@@ -2,17 +2,17 @@
 
 import React from 'react';
 import { Text, Image, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Styles } from '../styles/styles';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
+import { useAppDispatch } from '../hooks';
+import { removePlaylist } from '../redux/slices/savedPlaylistsSlice';
 
 const REMOVE_LOGO_LOCATION = '../assets/icons8-remove-48.png';
 
 type Props = {
   playlistName: string;
-  playlistUrl: string | null;
-  fetchAndSetExistingPlaylists: () => void;
+  playlistUrl: string;
   navigation: NativeStackNavigationProp<
     RootStackParamList,
     'ExistingPlaylists',
@@ -23,18 +23,13 @@ type Props = {
 const ExistingPlaylistItem = ({
   playlistName,
   playlistUrl,
-  fetchAndSetExistingPlaylists,
   navigation,
 }: Props) => {
-  const removePlaylist = async () => {
+  const dispatch = useAppDispatch();
+
+  const removePlaylistHandler = () => {
     try {
-      const storedPlaylists = await AsyncStorage.getItem('savedPlaylists');
-      if (storedPlaylists) {
-        const playlists = JSON.parse(storedPlaylists);
-        delete playlists[playlistName];
-        await AsyncStorage.setItem('savedPlaylists', JSON.stringify(playlists));
-        fetchAndSetExistingPlaylists();
-      }
+      dispatch(removePlaylist(playlistName));
     } catch (e) {
       console.log(e);
       Alert.alert('Error', 'Not able to remove, please try again!!!');
@@ -60,7 +55,7 @@ const ExistingPlaylistItem = ({
             [
               {
                 text: 'Yes',
-                onPress: removePlaylist,
+                onPress: removePlaylistHandler,
               },
               { text: 'No' },
             ]

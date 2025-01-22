@@ -12,24 +12,30 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import LabelAndTextInputField from './LabelAndTextInputField';
 import { Styles } from '../styles/styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types';
-import { PlaylistData } from '../types';
+import { PlaylistData, RootStackParamList } from '../types';
+import { setPlaylist } from '../redux/slices/savedPlaylistsSlice';
+import { useAppDispatch, useAppSelector } from '../hooks';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddPlaylist'>;
 
-function AddPlaylist({ route, navigation }: Props) {
+function AddPlaylist({ navigation }: Props) {
   const [playlistName, setPlaylistName] = useState('');
   const [playlistUrl, setplaylistUrl] = useState('');
   const [showActivityIndicator, setShowActivityIndicator] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const existingPlaylistNames = useAppSelector((state) =>
+    Object.keys(state.savedPlaylists).filter((name) => name !== '_persist')
+  );
+
   const addPlayist = () => {
+    setShowActivityIndicator(true);
     if (!isValidInputData()) {
       return;
     }
-    setShowActivityIndicator(true);
     storePlaylistAndMoveToExistingPlaylistsIfSuccessful();
   };
 
@@ -38,9 +44,7 @@ function AddPlaylist({ route, navigation }: Props) {
     if (playlistName === '') {
       Alert.alert('Error', 'Please enter playist name!!!');
       isValidInputData = false;
-    } else if (
-      route.params.existingPlaylistNames.includes(playlistName.trim())
-    ) {
+    } else if (existingPlaylistNames.includes(playlistName.trim())) {
       Alert.alert(
         'Error',
         `Playlist with name ${playlistName.trim()} already exists. Please use a different name!!!`
@@ -55,17 +59,18 @@ function AddPlaylist({ route, navigation }: Props) {
 
   const storePlaylistAndMoveToExistingPlaylistsIfSuccessful = async () => {
     try {
-      const storedPlaylists = await AsyncStorage.getItem('savedPlaylists');
-      const playlists: { [key: string]: PlaylistData } = storedPlaylists
-        ? JSON.parse(storedPlaylists)
-        : {};
-
-      playlists[playlistName.trim()] = {
+      const newPlaylist: PlaylistData = {
         url: playlistUrl.trim(),
         parsedData: null,
       };
 
-      await AsyncStorage.setItem('savedPlaylists', JSON.stringify(playlists));
+      dispatch(
+        setPlaylist({
+          playlistName: playlistName.trim(),
+          playlistData: newPlaylist,
+        })
+      );
+
       setShowActivityIndicator(false);
       navigation.navigate('HomeDrawer');
       if (Platform.OS === 'android') {

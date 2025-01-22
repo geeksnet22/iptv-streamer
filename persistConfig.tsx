@@ -11,3 +11,8 @@ export const recentChannelsPersistConfig = {
   key: 'recentChannels',
   storage: AsyncStorage,
 };
+
+export const savedPlaylistsPersistConfig = {
+  key: 'savedPlaylists',
+  storage: AsyncStorage,
+};

@@ -15,6 +15,7 @@ import HomeDrawer from './components/HomeDrawer';
 import { PersistGate } from 'redux-persist/integration/react';
 import { StatusBar, Text } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const App = () => {
   const RootStack = createStackNavigator<RootStackParamList>();
@@ -29,6 +30,7 @@ const App = () => {
     };
 
     prepare();
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   }, []);
 
   return (
@@ -44,7 +46,7 @@ const App = () => {
               <RootStack.Screen
                 name="HomeDrawer"
                 component={HomeDrawer}
-                options={{ headerShown: false, title: 'Home' }}
+                options={{ headerShown: false, title: 'PlayLists' }}
               />
               <RootStack.Screen
                 name="AddPlaylist"
