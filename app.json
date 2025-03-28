@@ -2,7 +2,7 @@
   "expo": {
     "name": "IptvStreamer",
     "slug": "IptvStreamer",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "icon": "./assets/icon.png",
@@ -29,6 +29,7 @@
       "package": "com.tv.streamer",
       "versionCode": 2
     },
+    "plugins": ["./plugins/withPictureInPicture"],
     "extra": {
       "eas": {
         "projectId": "4c4fa2d2-fe4b-47ef-ad97-ae09288b581f"

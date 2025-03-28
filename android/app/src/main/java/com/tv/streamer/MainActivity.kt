@@ -1,8 +1,11 @@
 package com.tv.streamer
 import expo.modules.splashscreen.SplashScreenManager
 
+import android.app.PictureInPictureParams
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.util.Rational
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
@@ -62,4 +65,26 @@ class MainActivity : ReactActivity() {
       // because it's doing more than [Activity.moveTaskToBack] in fact.
       super.invokeDefaultOnBackPressed()
   }
+
+  override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val aspectRatio = Rational(16, 9)
+            val pipParams = PictureInPictureParams.Builder()
+                .setAspectRatio(aspectRatio)
+                .build()
+            enterPictureInPictureMode(pipParams)
+        }
+    }
+
+    // Only override this method if the API level is 26 or higher
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+            // Handle UI changes when entering/exiting PiP mode
+        }
+    }
 }

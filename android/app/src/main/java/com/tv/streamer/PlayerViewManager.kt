@@ -37,9 +37,4 @@ class PlayerViewManager : SimpleViewManager<PlayerView>() {
         exoPlayer?.prepare()
         exoPlayer?.playWhenReady = true
     }
-
-    @ReactMethod
-    fun stop() {
-        exoPlayer?.stop()
-    }
 }
