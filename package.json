@@ -7,6 +7,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web"
   },
+  "type": "commonjs",
   "dependencies": {
     "@expo/config-plugins": "^9.0.17",
     "@react-native-async-storage/async-storage": "1.23.1",

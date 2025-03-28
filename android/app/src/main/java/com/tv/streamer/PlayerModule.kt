@@ -23,4 +23,10 @@ class PlayerModule(reactContext: ReactApplicationContext) : ReactContextBaseJava
       PlayerViewManager.exoPlayer?.stop()
     }
   }
+
+  @ReactMethod
+  fun setVideoPlayerActive(isActive: Boolean) {
+      val activity = currentActivity as? MainActivity
+      activity?.setVideoPlayerActive(isActive)
+  }
 }

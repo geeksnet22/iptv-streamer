@@ -91,7 +91,7 @@ android {
         applicationId 'com.tv.streamer'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
+        versionCode 3
         versionName "3.0.0"
     }
     signingConfigs {

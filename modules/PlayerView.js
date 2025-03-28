@@ -9,4 +9,6 @@ const PlayerView = requireNativeComponent('RCTPlayerView');
 export default {
   PlayerView,
   stop: () => PlayerModule.stop(),
+  setVideoPlayerActive: (isVideoPlayerActive) =>
+    PlayerModule.setVideoPlayerActive(isVideoPlayerActive),
 };

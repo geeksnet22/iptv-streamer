@@ -27,7 +27,7 @@
         "android.permission.CAMERA"
       ],
       "package": "com.tv.streamer",
-      "versionCode": 2
+      "versionCode": 3
     },
     "plugins": ["./plugins/withPictureInPicture"],
     "extra": {

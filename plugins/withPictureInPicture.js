@@ -1,8 +1,10 @@
 /** @format */
 
-import { withAndroidManifest } from '@expo/config-plugins/build/plugins/android-plugins.js';
+const {
+  withAndroidManifest,
+} = require('@expo/config-plugins/build/plugins/android-plugins.js');
 
-export default function withPictureInPicture(config) {
+function withPictureInPicture(config) {
   return withAndroidManifest(config, async (config) => {
     const manifest = config.modResults;
     const mainActivity = manifest.manifest.application[0].activity.find(
@@ -17,3 +19,5 @@ export default function withPictureInPicture(config) {
     return config;
   });
 }
+
+module.exports = withPictureInPicture;
