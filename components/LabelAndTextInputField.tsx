@@ -17,6 +17,7 @@ type Props = {
   placeholder: string;
   textContentType: TextInputProps['textContentType'];
   editable: boolean;
+  secureTextEntry?: boolean;
 };
 
 const LabelAndTextInputField = ({
@@ -26,6 +27,7 @@ const LabelAndTextInputField = ({
   placeholder,
   textContentType,
   editable,
+  secureTextEntry = false,
 }: Props) => {
   return (
     <View style={styles.container}>
@@ -39,6 +41,7 @@ const LabelAndTextInputField = ({
         autoCapitalize="none"
         autoComplete="off"
         editable={editable}
+        secureTextEntry={secureTextEntry}
       />
     </View>
   );

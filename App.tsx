@@ -5,7 +5,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import VideoPlayer from './components/VideoPlayer';
-import AddPlaylist from './components/AddPlaylist';
+import AddPlaylistURL from './components/AddPlaylistURL';
 import GroupList from './components/GroupList';
 import ChannelList from './components/ChannelList';
 import { RootStackParamList } from './types';
@@ -16,6 +16,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { StatusBar, Text } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import ChoosePlaylistType from './components/ChoosePlaylistType';
+import AddPlaylistCredentials from './components/AddPlaylistCredentials';
 
 const App = () => {
   const RootStack = createStackNavigator<RootStackParamList>();
@@ -49,8 +51,18 @@ const App = () => {
                 options={{ headerShown: false, title: 'PlayLists' }}
               />
               <RootStack.Screen
-                name="AddPlaylist"
-                component={AddPlaylist}
+                name="ChoosePlaylistType"
+                component={ChoosePlaylistType}
+                options={{ title: 'Choose Playlist Type' }}
+              />
+              <RootStack.Screen
+                name="AddPlaylistCredentials"
+                component={AddPlaylistCredentials}
+                options={{ title: 'New Playlist' }}
+              />
+              <RootStack.Screen
+                name="AddPlaylistURL"
+                component={AddPlaylistURL}
                 options={{ title: 'New Playlist' }}
               />
               <RootStack.Screen

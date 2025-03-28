@@ -16,17 +16,23 @@ import LabelAndTextInputField from './LabelAndTextInputField';
 import { Styles } from '../styles/styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { PlaylistData, RootStackParamList } from '../types';
-import { setPlaylist } from '../redux/slices/savedPlaylistsSlice';
 import { useAppDispatch, useAppSelector } from '../hooks';
+import { setPlaylist } from '../redux/slices/savedPlaylistsSlice';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'AddPlaylist'>;
+type Props = NativeStackScreenProps<
+  RootStackParamList,
+  'AddPlaylistCredentials'
+>;
 
-function AddPlaylist({ navigation }: Props) {
+function AddPlaylistCredentials({ navigation }: Props) {
   const [playlistName, setPlaylistName] = useState('');
-  const [playlistUrl, setplaylistUrl] = useState('');
+  const [serverUrl, setServerUrl] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showActivityIndicator, setShowActivityIndicator] = useState(false);
 
   const dispatch = useAppDispatch();
+
   const existingPlaylistNames = useAppSelector((state) =>
     Object.keys(state.savedPlaylists).filter((name) => name !== '_persist')
   );
@@ -41,27 +47,33 @@ function AddPlaylist({ navigation }: Props) {
   };
 
   const isValidInputData = () => {
-    let isValidInputData = true;
     if (playlistName === '') {
       Alert.alert('Error', 'Please enter playist name!!!');
-      isValidInputData = false;
+      return false;
     } else if (existingPlaylistNames.includes(playlistName.trim())) {
       Alert.alert(
         'Error',
         `Playlist with name ${playlistName.trim()} already exists. Please use a different name!!!`
       );
-      isValidInputData = false;
-    } else if (playlistUrl === '') {
-      Alert.alert('Error', 'Please enter playlist url!!!');
-      isValidInputData = false;
+      return false;
+    } else if (serverUrl === '') {
+      Alert.alert('Error', 'Please enter server url!!!');
+      return false;
+    } else if (username === '') {
+      Alert.alert('Error', 'Please enter username!!!');
+      return false;
+    } else if (password === '') {
+      Alert.alert('Error', 'Please enter password!!!');
+      return false;
     }
-    return isValidInputData;
+    return true;
   };
 
   const storePlaylistAndMoveToExistingPlaylistsIfSuccessful = async () => {
     try {
+      const playlistUrl = `${serverUrl.trim()}/get.php?username=${username.trim()}&password=${password.trim()}&type=m3u_plus&output=ts`;
       const newPlaylist: PlaylistData = {
-        url: playlistUrl.trim(),
+        url: playlistUrl,
         parsedData: null,
       };
 
@@ -109,11 +121,28 @@ function AddPlaylist({ navigation }: Props) {
           editable={!showActivityIndicator}
         />
         <LabelAndTextInputField
-          label="M3U Playlist URL"
-          inputText={playlistUrl}
-          setInputText={setplaylistUrl}
-          placeholder="Playlist URL..."
+          label="Server URL"
+          inputText={serverUrl}
+          setInputText={setServerUrl}
+          placeholder="Enter server URL..."
           textContentType="URL"
+          editable={!showActivityIndicator}
+        />
+        <LabelAndTextInputField
+          label="Username"
+          inputText={username}
+          setInputText={setUsername}
+          placeholder="Enter username..."
+          textContentType="username"
+          editable={!showActivityIndicator}
+        />
+        <LabelAndTextInputField
+          label="Password"
+          inputText={password}
+          setInputText={setPassword}
+          placeholder="Enter password..."
+          textContentType="password"
+          secureTextEntry
           editable={!showActivityIndicator}
         />
       </View>
@@ -165,4 +194,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddPlaylist;
+export default AddPlaylistCredentials;

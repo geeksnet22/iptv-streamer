@@ -16,7 +16,7 @@ const ExistingPlaylists = ({ navigation }: Props) => {
   const recentChannels = useAppSelector((state) => state.recentChannels.value);
   const playlists = useAppSelector((state) => state.savedPlaylists);
 
-  const buttonOnPress = () => navigation.navigate('AddPlaylist');
+  const buttonOnPress = () => navigation.navigate('ChoosePlaylistType');
 
   const renderItem = ({
     item,

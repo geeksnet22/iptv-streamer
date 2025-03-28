@@ -1,11 +1,11 @@
 /** @format */
 
-import { Playlist, PlaylistItem } from 'iptv-playlist-parser';
+import { Playlist } from 'iptv-playlist-parser';
 
 export type RootStackParamList = {
-  AddPlaylist: {
-    existingPlaylistNames: string[];
-  };
+  ChoosePlaylistType: undefined;
+  AddPlaylistCredentials: undefined;
+  AddPlaylistURL: undefined;
   GroupList: {
     playlistName: string;
     playlistUrl: string | null;
